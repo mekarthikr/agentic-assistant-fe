@@ -1,5 +1,6 @@
 import type { ChatModelAdapter, ThreadMessage } from '@assistant-ui/react';
-import type { ChatSocketService } from './ChatSocket.service';
+import type { ChatHistoryMessage } from '@app/types';
+import type { ChatApiService } from './ChatApi.service';
 
 const getText = (message: ThreadMessage): string =>
   message.content
@@ -8,9 +9,23 @@ const getText = (message: ThreadMessage): string =>
     .join('\n')
     .trim();
 
-export const createWebSocketChatAdapter = (
-  chatSocketService: ChatSocketService,
-  conversationId: string,
+const toChatHistory = (messages: readonly ThreadMessage[]): ChatHistoryMessage[] =>
+  messages
+    .map((message) => ({
+      role: message.role,
+      content: getText(message),
+    }))
+    .filter(
+      (message): message is ChatHistoryMessage =>
+        (message.role === 'user' ||
+          message.role === 'assistant' ||
+          message.role === 'system') &&
+        Boolean(message.content),
+    )
+    .slice(-50);
+
+export const createChatAdapter = (
+  chatApiService: ChatApiService,
 ): ChatModelAdapter => ({
   async *run({ messages, abortSignal }) {
     const userMessage = [...messages]
@@ -28,12 +43,8 @@ export const createWebSocketChatAdapter = (
     let response = '';
 
     try {
-      for await (const delta of chatSocketService.stream(
-        {
-          requestId: crypto.randomUUID(),
-          conversationId,
-          message: getText(userMessage),
-        },
+      for await (const delta of chatApiService.stream(
+        toChatHistory(messages),
         abortSignal,
       )) {
         response += delta;

@@ -1,7 +1,7 @@
 import { AssistantRuntimeProvider, useLocalRuntime } from '@assistant-ui/react';
 import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 
-import { ChatSocketService, createWebSocketChatAdapter } from '@app/service';
+import { ChatApiService, createChatAdapter } from '@app/service';
 import type {
   ChatControlContextValue,
   ChatRuntimeProviderProps,
@@ -9,31 +9,30 @@ import type {
 import { ChatControlContext } from './ChatControlContext';
 
 export const ChatRuntimeProvider = ({ children }: ChatRuntimeProviderProps) => {
-  const [chatSocketService] = useState(() => new ChatSocketService());
-  const [conversationId] = useState(() => crypto.randomUUID());
+  const [chatApiService] = useState(() => new ChatApiService());
   const adapter = useMemo(
-    () => createWebSocketChatAdapter(chatSocketService, conversationId),
-    [chatSocketService, conversationId],
+    () => createChatAdapter(chatApiService),
+    [chatApiService],
   );
   const runtime = useLocalRuntime(adapter);
   const connectionStatus = useSyncExternalStore(
-    chatSocketService.subscribe,
-    chatSocketService.getStatus,
-    chatSocketService.getStatus,
+    chatApiService.subscribe,
+    chatApiService.getStatus,
+    chatApiService.getStatus,
   );
 
   useEffect(() => {
-    void chatSocketService.connect().catch(() => undefined);
-    return () => chatSocketService.close();
-  }, [chatSocketService]);
+    void chatApiService.connect().catch(() => undefined);
+    return () => chatApiService.close();
+  }, [chatApiService]);
 
   const controls = useMemo<ChatControlContextValue>(
     () => ({
       connectionStatus,
-      reconnect: () => chatSocketService.connect(),
+      reconnect: () => chatApiService.connect(),
       runtime,
     }),
-    [chatSocketService, connectionStatus, runtime],
+    [chatApiService, connectionStatus, runtime],
   );
 
   return (

@@ -6,25 +6,9 @@ export type ChatDisplayMode = 'widget' | 'fullscreen';
 export type ChatConnectionStatus =
   'connecting' | 'connected' | 'disconnected' | 'error';
 
-export interface ChatRequest {
-  requestId: string;
-  conversationId: string;
-  message: string;
-}
-
-export interface ChatServerMessage {
-  type: string;
-  requestId?: string;
-  delta?: string;
-  message?: string;
-  timestamp?: number;
-}
-
-export interface PendingChatRequest {
-  deltas: string[];
-  done: boolean;
-  error?: Error;
-  wake?: () => void;
+export interface ChatHistoryMessage {
+  role: 'system' | 'user' | 'assistant';
+  content: string;
 }
 
 export interface ChatControlContextValue {
