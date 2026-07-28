@@ -10,7 +10,6 @@ const getText = (message: ThreadMessage): string =>
 
 export const createWebSocketChatAdapter = (
   chatSocketService: ChatSocketService,
-  conversationId: string,
 ): ChatModelAdapter => ({
   async *run({ messages, abortSignal }) {
     const userMessage = [...messages]
@@ -31,7 +30,7 @@ export const createWebSocketChatAdapter = (
       for await (const delta of chatSocketService.stream(
         {
           requestId: crypto.randomUUID(),
-          conversationId,
+          conversationId: chatSocketService.getConversationId(),
           message: getText(userMessage),
         },
         abortSignal,

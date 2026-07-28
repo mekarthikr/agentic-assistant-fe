@@ -2,6 +2,7 @@ import type {
   ChatConnectionStatus,
   ChatRequest,
   ChatServerMessage,
+  ModelTokenUsage,
   PendingChatRequest,
 } from '@app/types';
 
@@ -31,8 +32,13 @@ export class ChatSocketService {
     (status: ChatConnectionStatus) => void
   >();
   private status: ChatConnectionStatus = 'disconnected';
+  private conversationId = crypto.randomUUID();
+  private tokenUsage: ModelTokenUsage | null = null;
+  private readonly tokenUsageListeners = new Set<() => void>();
 
   public getStatus = (): ChatConnectionStatus => this.status;
+  public getTokenUsage = (): ModelTokenUsage | null => this.tokenUsage;
+  public getConversationId = (): string => this.conversationId;
 
   public subscribe = (
     listener: (status: ChatConnectionStatus) => void,
@@ -41,9 +47,32 @@ export class ChatSocketService {
     return () => this.statusListeners.delete(listener);
   };
 
+  public subscribeTokenUsage = (listener: () => void): (() => void) => {
+    this.tokenUsageListeners.add(listener);
+    return () => this.tokenUsageListeners.delete(listener);
+  };
+
+  public resetConversation = (): void => {
+    this.conversationId = crypto.randomUUID();
+    if (!this.tokenUsage) return;
+
+    this.setTokenUsage({
+      ...this.tokenUsage,
+      inputTokens: 0,
+      outputTokens: 0,
+      totalTokens: 0,
+      remainingTokens: this.tokenUsage.contextWindow,
+    });
+  };
+
   private setStatus(status: ChatConnectionStatus): void {
     this.status = status;
     for (const listener of this.statusListeners) listener(status);
+  }
+
+  private setTokenUsage(tokenUsage: ModelTokenUsage): void {
+    this.tokenUsage = tokenUsage;
+    for (const listener of this.tokenUsageListeners) listener();
   }
 
   public async connect(): Promise<void> {
@@ -80,6 +109,25 @@ export class ChatSocketService {
           this.reconnectAttempt = 0;
           this.setStatus('connected');
           this.startHeartbeat(socket);
+          if (
+            typeof payload.model === 'string' &&
+            typeof payload.contextWindow === 'number'
+          ) {
+            const current = this.tokenUsage;
+            this.setTokenUsage(
+              current?.model === payload.model &&
+                current.contextWindow === payload.contextWindow
+                ? current
+                : {
+                    model: payload.model,
+                    contextWindow: payload.contextWindow,
+                    inputTokens: 0,
+                    outputTokens: 0,
+                    totalTokens: 0,
+                    remainingTokens: payload.contextWindow,
+                  },
+            );
+          }
           resolve();
           return;
         }
@@ -101,6 +149,7 @@ export class ChatSocketService {
           request.deltas.push(payload.delta);
           request.wake?.();
         } else if (payload.type === 'chat.complete') {
+          if (payload.tokenUsage) this.setTokenUsage(payload.tokenUsage);
           request.done = true;
           request.wake?.();
         } else if (payload.type === 'chat.error') {

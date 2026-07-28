@@ -10,16 +10,20 @@ import { ChatControlContext } from './ChatControlContext';
 
 export const ChatRuntimeProvider = ({ children }: ChatRuntimeProviderProps) => {
   const [chatSocketService] = useState(() => new ChatSocketService());
-  const [conversationId] = useState(() => crypto.randomUUID());
   const adapter = useMemo(
-    () => createWebSocketChatAdapter(chatSocketService, conversationId),
-    [chatSocketService, conversationId],
+    () => createWebSocketChatAdapter(chatSocketService),
+    [chatSocketService],
   );
   const runtime = useLocalRuntime(adapter);
   const connectionStatus = useSyncExternalStore(
     chatSocketService.subscribe,
     chatSocketService.getStatus,
     chatSocketService.getStatus,
+  );
+  const tokenUsage = useSyncExternalStore(
+    chatSocketService.subscribeTokenUsage,
+    chatSocketService.getTokenUsage,
+    chatSocketService.getTokenUsage,
   );
 
   useEffect(() => {
@@ -30,10 +34,12 @@ export const ChatRuntimeProvider = ({ children }: ChatRuntimeProviderProps) => {
   const controls = useMemo<ChatControlContextValue>(
     () => ({
       connectionStatus,
+      tokenUsage,
       reconnect: () => chatSocketService.connect(),
+      resetConversation: chatSocketService.resetConversation,
       runtime,
     }),
-    [chatSocketService, connectionStatus, runtime],
+    [chatSocketService, connectionStatus, runtime, tokenUsage],
   );
 
   return (

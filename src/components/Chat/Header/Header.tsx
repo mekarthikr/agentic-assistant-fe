@@ -5,13 +5,17 @@ import { useChatControl } from '@app/components/Chat/ChatRuntimeProvider';
 import { ChatIcon } from '@app/components/ChatIcon';
 import type { HeaderProps } from '@app/types';
 
+const TOKEN_FORMATTER = new Intl.NumberFormat('en-US');
+
 export const Header: React.FC<HeaderProps> = ({ mode, onClose, onExpand }) => {
   const aui = useAui();
-  const { connectionStatus, reconnect } = useChatControl();
+  const { connectionStatus, reconnect, resetConversation, tokenUsage } =
+    useChatControl();
   const isConnected = connectionStatus === 'connected';
 
   const startNewChat = () => {
     aui.thread().cancelRun();
+    resetConversation();
     aui.thread().reset();
   };
 
@@ -69,8 +73,19 @@ export const Header: React.FC<HeaderProps> = ({ mode, onClose, onExpand }) => {
               ? 'Chat connected'
               : connectionStatus === 'connecting'
                 ? 'Connecting…'
-                : 'Reconnect chat'}
+              : 'Reconnect chat'}
           </button>
+          {tokenUsage ? (
+            <p
+              aria-live="polite"
+              title={`${tokenUsage.model}: ${TOKEN_FORMATTER.format(tokenUsage.inputTokens)} input tokens and ${TOKEN_FORMATTER.format(tokenUsage.outputTokens)} output tokens out of a ${TOKEN_FORMATTER.format(tokenUsage.contextWindow)}-token context window`}
+              className="mt-0.5 truncate text-[10px] leading-3 text-slate-500"
+            >
+              Tokens: {TOKEN_FORMATTER.format(tokenUsage.totalTokens)} used
+              {' · '}
+              {TOKEN_FORMATTER.format(tokenUsage.remainingTokens)} left
+            </p>
+          ) : null}
         </div>
       </div>
 

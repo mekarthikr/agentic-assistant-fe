@@ -12,12 +12,24 @@ export interface ChatRequest {
   message: string;
 }
 
+export interface ModelTokenUsage {
+  model: string;
+  contextWindow: number;
+  inputTokens: number;
+  outputTokens: number;
+  totalTokens: number;
+  remainingTokens: number;
+}
+
 export interface ChatServerMessage {
   type: string;
   requestId?: string;
   delta?: string;
   message?: string;
   timestamp?: number;
+  model?: string;
+  contextWindow?: number;
+  tokenUsage?: ModelTokenUsage;
 }
 
 export interface PendingChatRequest {
@@ -29,7 +41,9 @@ export interface PendingChatRequest {
 
 export interface ChatControlContextValue {
   connectionStatus: ChatConnectionStatus;
+  tokenUsage: ModelTokenUsage | null;
   reconnect: () => Promise<void>;
+  resetConversation: () => void;
   runtime: AssistantRuntime;
 }
 
