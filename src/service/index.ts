@@ -1,2 +1,2 @@
-export * from './ChatApi.service';
 export * from './ChatRuntime.service';
+export * from './ChatSocket.service';

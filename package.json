@@ -4,9 +4,6 @@
   "version": "0.0.0",
   "author": "Aspire Systems",
   "type": "module",
-  "engines": {
-    "node": "22.x"
-  },
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
