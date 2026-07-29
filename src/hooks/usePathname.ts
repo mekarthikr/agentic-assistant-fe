@@ -11,10 +11,17 @@ export function usePathname() {
   }, []);
 
   const navigate = useCallback((path: string) => {
-    if (path === window.location.pathname) return;
+    const target = new URL(path, window.location.origin);
+
+    if (
+      target.pathname === window.location.pathname &&
+      target.search === window.location.search
+    ) {
+      return;
+    }
 
     window.history.pushState({}, '', path);
-    setPathname(path);
+    setPathname(window.location.pathname);
   }, []);
 
   return { pathname, navigate };
