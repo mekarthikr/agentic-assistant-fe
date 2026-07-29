@@ -218,7 +218,7 @@ const EmptyThread: React.FC<EmptyThreadProps> = ({ mode }) => {
       <section className="mx-auto flex w-full max-w-[34rem] flex-col px-5 pt-6 pb-4 text-left sm:min-h-[calc(100dvh-12rem)] sm:translate-y-10 sm:justify-center sm:pb-20">
         <div className="hidden w-fit items-center gap-2 rounded-full border border-sky-200/80 bg-[#eaf3fb] px-3 py-1.5 text-[11px] font-semibold text-[#0b3a66] sm:inline-flex">
           <ChatIcon name="shield" className="size-3.5" />
-          Insurance agent assistant
+          Intellegent Assistant
         </div>
         <h2 className="mt-4 max-w-[32rem] text-[32px] leading-[1.08] font-semibold tracking-[-0.035em] text-slate-950 sm:mt-5 sm:text-[40px]">
           Hi {GREETING_NAME}, what can I help you find?

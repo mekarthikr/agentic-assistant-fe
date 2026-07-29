@@ -44,15 +44,6 @@ export const Header: React.FC<HeaderProps> = ({ mode, onClose, onExpand }) => {
           <ChatIcon name="shield" className="size-[18px]" />
         </span>
         <div className="min-w-0">
-          <h1
-            className={
-              mode === 'fullscreen'
-                ? 'truncate text-[13px] leading-4 font-semibold text-slate-950'
-                : 'truncate text-[15px] leading-5 font-semibold text-slate-950'
-            }
-          >
-            Agent Assist
-          </h1>
           <button
             type="button"
             disabled={isConnected || connectionStatus === 'connecting'}

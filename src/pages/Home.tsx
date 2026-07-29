@@ -7,7 +7,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenChat }) => {
     <main className="flex min-h-dvh items-center justify-center px-6 text-slate-900">
       <section className="mx-auto max-w-2xl text-center">
         <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
-          Agentic Assistant
+          Intellegent Assistant
         </h1>
         <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-slate-600">
           A focused workspace for product, contract, and case questions.

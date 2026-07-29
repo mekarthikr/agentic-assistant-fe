@@ -1,6 +1,6 @@
 # agentic-assistant-fe
 
-React 19 and TypeScript frontend for Agentic Assistant, built with Vite and Tailwind CSS.
+React 19 and TypeScript frontend for Intellegent Assistant, built with Vite and Tailwind CSS.
 
 ## Requirements
 
