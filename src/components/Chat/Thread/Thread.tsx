@@ -22,7 +22,7 @@ const EMPTY_SUGGESTIONS = [
 
 const USER_DISPLAY_NAME = import.meta.env.VITE_USER_DISPLAY_NAME?.trim();
 const getGreetingName = (userType?: UserType): string =>
-  userType === 'client' ? 'Williams Robert' : USER_DISPLAY_NAME || 'User';
+  userType === 'client' ? 'Smith Robert' : USER_DISPLAY_NAME || 'User';
 
 const TIME_FORMATTER = new Intl.DateTimeFormat('en-US', {
   hour: 'numeric',
