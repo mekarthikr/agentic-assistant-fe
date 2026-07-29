@@ -204,8 +204,11 @@ const ConversationDate: React.FC = () => {
   );
 };
 
-const EmptyThread: React.FC<EmptyThreadProps> = ({ mode }) => {
+const EmptyThread: React.FC<EmptyThreadProps> = ({ mode, userType }) => {
   const aui = useAui();
+  const assistantLabel = `Intellegent Assistant${
+    userType ? ` for ${userType === 'agent' ? 'Agent' : 'Client'}` : ''
+  }`;
 
   const submitSuggestion = (prompt: string) => {
     const composer = aui.thread().composer();
@@ -218,7 +221,7 @@ const EmptyThread: React.FC<EmptyThreadProps> = ({ mode }) => {
       <section className="mx-auto flex w-full max-w-[34rem] flex-col px-5 pt-6 pb-4 text-left sm:min-h-[calc(100dvh-12rem)] sm:translate-y-10 sm:justify-center sm:pb-20">
         <div className="hidden w-fit items-center gap-2 rounded-full border border-sky-200/80 bg-[#eaf3fb] px-3 py-1.5 text-[11px] font-semibold text-[#0b3a66] sm:inline-flex">
           <ChatIcon name="shield" className="size-3.5" />
-          Intellegent Assistant
+          {assistantLabel}
         </div>
         <h2 className="mt-4 max-w-[32rem] text-[32px] leading-[1.08] font-semibold tracking-[-0.035em] text-slate-950 sm:mt-5 sm:text-[40px]">
           Hi {GREETING_NAME}, what can I help you find?
@@ -304,7 +307,12 @@ const ThreadActivity: React.FC = () => {
   );
 };
 
-export const Thread: React.FC<ThreadProps> = ({ mode, onClose, onExpand }) => {
+export const Thread: React.FC<ThreadProps> = ({
+  mode,
+  onClose,
+  onExpand,
+  userType,
+}) => {
   return (
     <section
       aria-label={
@@ -328,7 +336,7 @@ export const Thread: React.FC<ThreadProps> = ({ mode, onClose, onExpand }) => {
           }
         >
           <ThreadPrimitive.Empty>
-            <EmptyThread mode={mode} />
+            <EmptyThread mode={mode} userType={userType} />
           </ThreadPrimitive.Empty>
           {mode === 'widget' ? <ConversationDate /> : null}
           <ThreadPrimitive.Messages

@@ -1,5 +1,6 @@
 import type { AssistantRuntime } from '@assistant-ui/react';
 import type { ReactNode } from 'react';
+import type { UserType } from './Component.types';
 
 export type ChatDisplayMode = 'widget' | 'fullscreen';
 
@@ -55,10 +56,12 @@ export interface ThreadProps {
   mode: ChatDisplayMode;
   onClose: () => void;
   onExpand?: () => void;
+  userType?: UserType;
 }
 
 export interface EmptyThreadProps {
   mode: ChatDisplayMode;
+  userType?: UserType;
 }
 
 export interface HeaderProps {
