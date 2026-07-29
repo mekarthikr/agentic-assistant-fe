@@ -19,6 +19,7 @@ The chat UI connects to `https://agentic-assistant-be.vercel.app/` over a native
 browser WebSocket at `wss://agentic-assistant-be.vercel.app/ws`. Configure
 `VITE_WS_URL` to override that endpoint. If backend authentication is enabled,
 set `VITE_WS_AUTH_TOKEN` to the matching `SOCKET_AUTH_TOKEN`.
+Set `VITE_USER_DISPLAY_NAME` to show a name in the chat greeting.
 
 The assistant-ui runtime is provided by `ChatRuntimeProvider`. Its
 `ChatControlContext` exposes the connection status, reconnect action, and chat
