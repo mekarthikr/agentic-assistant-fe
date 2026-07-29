@@ -12,7 +12,7 @@ import { Composer } from '@app/components/Chat/Composer';
 import { Header } from '@app/components/Chat/Header';
 import { MarkdownText } from '@app/components/Chat/MarkdownText';
 import { ChatIcon } from '@app/components/ChatIcon';
-import type { EmptyThreadProps, ThreadProps } from '@app/types';
+import type { EmptyThreadProps, ThreadProps, UserType } from '@app/types';
 
 const EMPTY_SUGGESTIONS = [
   'Download policy document',
@@ -21,7 +21,8 @@ const EMPTY_SUGGESTIONS = [
 ] as const;
 
 const USER_DISPLAY_NAME = import.meta.env.VITE_USER_DISPLAY_NAME?.trim();
-const GREETING_NAME = USER_DISPLAY_NAME || 'Aarathi Ajith';
+const getGreetingName = (userType?: UserType): string =>
+  userType === 'client' ? 'Williams Robert' : USER_DISPLAY_NAME || 'User';
 
 const TIME_FORMATTER = new Intl.DateTimeFormat('en-US', {
   hour: 'numeric',
@@ -206,6 +207,7 @@ const ConversationDate: React.FC = () => {
 
 const EmptyThread: React.FC<EmptyThreadProps> = ({ mode, userType }) => {
   const aui = useAui();
+  const greetingName = getGreetingName(userType);
   const assistantLabel = `Intellegent Assistant${
     userType ? ` for ${userType === 'agent' ? 'Agent' : 'Client'}` : ''
   }`;
@@ -224,7 +226,7 @@ const EmptyThread: React.FC<EmptyThreadProps> = ({ mode, userType }) => {
           {assistantLabel}
         </div>
         <h2 className="mt-4 max-w-[32rem] text-[32px] leading-[1.08] font-semibold tracking-[-0.035em] text-slate-950 sm:mt-5 sm:text-[40px]">
-          Hi {GREETING_NAME}, what can I help you find?
+          Hi {greetingName}, what can I help you find?
         </h2>
         <p className="mt-4 max-w-[31rem] text-[14px] leading-6 text-slate-500">
           Get help with policy documents, claims, premium payments,
@@ -261,7 +263,7 @@ const EmptyThread: React.FC<EmptyThreadProps> = ({ mode, userType }) => {
           </p>
           <div className="rounded-[18px] rounded-bl-md bg-[#eaf3fb] px-4 py-3 text-[13px] leading-6 text-slate-700 sm:text-sm">
             <p className="font-medium text-slate-900">
-              Hi {GREETING_NAME}, what can I help you find?
+              Hi {greetingName}, what can I help you find?
             </p>
             <p className="mt-1">
               Get help with policy documents, claims, premium payments,

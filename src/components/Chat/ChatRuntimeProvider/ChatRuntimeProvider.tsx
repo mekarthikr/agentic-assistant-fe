@@ -8,11 +8,14 @@ import type {
 } from '@app/types';
 import { ChatControlContext } from './ChatControlContext';
 
-export const ChatRuntimeProvider = ({ children }: ChatRuntimeProviderProps) => {
+export const ChatRuntimeProvider = ({
+  children,
+  userType,
+}: ChatRuntimeProviderProps) => {
   const [chatSocketService] = useState(() => new ChatSocketService());
   const adapter = useMemo(
-    () => createWebSocketChatAdapter(chatSocketService),
-    [chatSocketService],
+    () => createWebSocketChatAdapter(chatSocketService, userType),
+    [chatSocketService, userType],
   );
   const runtime = useLocalRuntime(adapter);
   const connectionStatus = useSyncExternalStore(

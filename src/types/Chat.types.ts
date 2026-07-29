@@ -11,6 +11,7 @@ export interface ChatRequest {
   requestId: string;
   conversationId: string;
   message: string;
+  userType: UserType;
 }
 
 export interface ModelTokenUsage {
@@ -50,6 +51,7 @@ export interface ChatControlContextValue {
 
 export interface ChatRuntimeProviderProps {
   children: ReactNode;
+  userType: UserType;
 }
 
 export interface ThreadProps {

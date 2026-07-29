@@ -1,4 +1,5 @@
 import type { ChatModelAdapter, ThreadMessage } from '@assistant-ui/react';
+import type { UserType } from '@app/types';
 import type { ChatSocketService } from './ChatSocket.service';
 
 const getText = (message: ThreadMessage): string =>
@@ -10,6 +11,7 @@ const getText = (message: ThreadMessage): string =>
 
 export const createWebSocketChatAdapter = (
   chatSocketService: ChatSocketService,
+  userType: UserType,
 ): ChatModelAdapter => ({
   async *run({ messages, abortSignal }) {
     const userMessage = [...messages]
@@ -32,6 +34,7 @@ export const createWebSocketChatAdapter = (
           requestId: crypto.randomUUID(),
           conversationId: chatSocketService.getConversationId(),
           message: getText(userMessage),
+          userType,
         },
         abortSignal,
       )) {
