@@ -20,6 +20,9 @@ const EMPTY_SUGGESTIONS = [
   'Premium grace period',
 ] as const;
 
+const USER_DISPLAY_NAME = import.meta.env.VITE_USER_DISPLAY_NAME?.trim();
+const GREETING_NAME = USER_DISPLAY_NAME || 'there';
+
 const TIME_FORMATTER = new Intl.DateTimeFormat('en-US', {
   hour: 'numeric',
   minute: '2-digit',
@@ -218,7 +221,7 @@ const EmptyThread: React.FC<EmptyThreadProps> = ({ mode }) => {
           Insurance agent assistant
         </div>
         <h2 className="mt-4 max-w-[32rem] text-[32px] leading-[1.08] font-semibold tracking-[-0.035em] text-slate-950 sm:mt-5 sm:text-[40px]">
-          Hi Agent, what can I help you find?
+          Hi {GREETING_NAME}, what can I help you find?
         </h2>
         <p className="mt-4 max-w-[31rem] text-[14px] leading-6 text-slate-500">
           Get help with policy documents, claims, premium payments,
@@ -255,7 +258,7 @@ const EmptyThread: React.FC<EmptyThreadProps> = ({ mode }) => {
           </p>
           <div className="rounded-[18px] rounded-bl-md bg-[#eaf3fb] px-4 py-3 text-[13px] leading-6 text-slate-700 sm:text-sm">
             <p className="font-medium text-slate-900">
-              Hi Agent, what can I help you find?
+              Hi {GREETING_NAME}, what can I help you find?
             </p>
             <p className="mt-1">
               Get help with policy documents, claims, premium payments,
