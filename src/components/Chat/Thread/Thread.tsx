@@ -15,9 +15,9 @@ import { ChatIcon } from '@app/components/ChatIcon';
 import type { EmptyThreadProps, ThreadProps } from '@app/types';
 
 const EMPTY_SUGGESTIONS = [
-  'Find a Contract',
-  'Check Approval Status',
-  'Page Navigation',
+  'How do I download my policy document?',
+  'What documents are required to file a claim?',
+  'What is the premium grace period?',
 ] as const;
 
 const TIME_FORMATTER = new Intl.DateTimeFormat('en-US', {
