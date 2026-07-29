@@ -21,7 +21,7 @@ const EMPTY_SUGGESTIONS = [
 ] as const;
 
 const USER_DISPLAY_NAME = import.meta.env.VITE_USER_DISPLAY_NAME?.trim();
-const GREETING_NAME = USER_DISPLAY_NAME || 'there';
+const GREETING_NAME = USER_DISPLAY_NAME || 'Aarathi Ajith';
 
 const TIME_FORMATTER = new Intl.DateTimeFormat('en-US', {
   hour: 'numeric',
