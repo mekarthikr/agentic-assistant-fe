@@ -22,12 +22,15 @@ export interface AppLayoutProps {
   children: ReactNode;
 }
 
+export type UserType = 'agent' | 'client';
+
 export interface HomePageProps {
-  onOpenChat: () => void;
+  onOpenChat: (userType: UserType) => void;
 }
 
 export interface FullscreenChatPageProps {
   onClose: () => void;
+  userType: UserType;
 }
 
 export interface AssistantModalProps {
