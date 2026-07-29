@@ -22,7 +22,10 @@ export const App = (): React.JSX.Element => {
   const isChatPage = pathname === '/chat' && userType !== null;
 
   return (
-    <ChatRuntimeProvider userType={userType ?? 'agent'}>
+    <ChatRuntimeProvider
+      key={userType ?? 'agent'}
+      userType={userType ?? 'agent'}
+    >
       <AppLayout>
         {isChatPage ? (
           <Suspense fallback={<ChatPageLoading />}>
