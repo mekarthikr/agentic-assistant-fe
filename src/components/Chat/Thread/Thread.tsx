@@ -15,9 +15,9 @@ import { ChatIcon } from '@app/components/ChatIcon';
 import type { EmptyThreadProps, ThreadProps } from '@app/types';
 
 const EMPTY_SUGGESTIONS = [
-  'Find a Contract',
-  'Check Approval Status',
-  'Page Navigation',
+  'How do I download my policy document?',
+  'What documents are required to file a claim?',
+  'What is the premium grace period?',
 ] as const;
 
 const USER_DISPLAY_NAME = import.meta.env.VITE_USER_DISPLAY_NAME?.trim();
@@ -224,8 +224,8 @@ const EmptyThread: React.FC<EmptyThreadProps> = ({ mode }) => {
           Hi {GREETING_NAME}, what can I help you find?
         </h2>
         <p className="mt-4 max-w-[31rem] text-[14px] leading-6 text-slate-500">
-          Find contract details, compare insurance products, check approvals,
-          and navigate the portal without leaving your workflow.
+          Get help with policy documents, claims, premium payments,
+          beneficiaries, and customer support.
         </p>
         <div className="mt-8 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
           {EMPTY_SUGGESTIONS.map((suggestion) => (
@@ -261,8 +261,8 @@ const EmptyThread: React.FC<EmptyThreadProps> = ({ mode }) => {
               Hi {GREETING_NAME}, what can I help you find?
             </p>
             <p className="mt-1">
-              Find contract details, compare insurance products, check
-              approvals, or navigate the portal.
+              Get help with policy documents, claims, premium payments,
+              beneficiaries, and customer support.
             </p>
           </div>
         </div>
