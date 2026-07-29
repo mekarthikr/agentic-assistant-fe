@@ -14,10 +14,16 @@ import { MarkdownText } from '@app/components/Chat/MarkdownText';
 import { ChatIcon } from '@app/components/ChatIcon';
 import type { EmptyThreadProps, ThreadProps } from '@app/types';
 
-const EMPTY_SUGGESTIONS = [
+const CLIENT_SUGGESTIONS = [
   'Download policy document',
   'File a claim',
   'Premium grace period',
+] as const;
+
+const AGENT_SUGGESTIONS = [
+  'Product Features',
+  'Claim Documents',
+  'Premium Options',
 ] as const;
 
 const USER_DISPLAY_NAME = import.meta.env.VITE_USER_DISPLAY_NAME?.trim();
@@ -209,6 +215,11 @@ const EmptyThread: React.FC<EmptyThreadProps> = ({ mode, userType }) => {
   const assistantLabel = `Intellegent Assistant${
     userType ? ` for ${userType === 'agent' ? 'Agent' : 'Client'}` : ''
   }`;
+  const isClient = userType === 'client';
+  const suggestions = isClient ? CLIENT_SUGGESTIONS : AGENT_SUGGESTIONS;
+  const helperText = isClient
+    ? 'Get help with policy documents, claims, premium payments, beneficiaries, and customer support.'
+    : 'Explore product, claims, and premium guidance from our reference documents.';
 
   const submitSuggestion = (prompt: string) => {
     const composer = aui.thread().composer();
@@ -227,11 +238,10 @@ const EmptyThread: React.FC<EmptyThreadProps> = ({ mode, userType }) => {
           Hi {GREETING_NAME}, what can I help you find?
         </h2>
         <p className="mt-4 max-w-[31rem] text-[14px] leading-6 text-slate-500">
-          Get help with policy documents, claims, premium payments,
-          beneficiaries, and customer support.
+          {helperText}
         </p>
         <div className="mt-8 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
-          {EMPTY_SUGGESTIONS.map((suggestion) => (
+          {suggestions.map((suggestion) => (
             <button
               key={suggestion}
               type="button"
@@ -264,14 +274,13 @@ const EmptyThread: React.FC<EmptyThreadProps> = ({ mode, userType }) => {
               Hi {GREETING_NAME}, what can I help you find?
             </p>
             <p className="mt-1">
-              Get help with policy documents, claims, premium payments,
-              beneficiaries, and customer support.
+              {helperText}
             </p>
           </div>
         </div>
       </div>
       <div className="mt-5 flex flex-col items-end gap-2.5 pl-10 sm:pl-16">
-        {EMPTY_SUGGESTIONS.map((suggestion) => (
+        {suggestions.map((suggestion) => (
           <button
             key={suggestion}
             type="button"
