@@ -4,7 +4,7 @@ import type React from 'react';
 import type { HomePageProps, UserType } from '@app/types';
 
 export const HomePage: React.FC<HomePageProps> = ({ onOpenChat }) => {
-  const [userType, setUserType] = useState<UserType | null>(null);
+  const [userType, setUserType] = useState<UserType>('agent');
 
   return (
     <main className="flex min-h-dvh items-center justify-center px-6 text-slate-900">
