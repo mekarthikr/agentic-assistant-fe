@@ -15,9 +15,9 @@ import { ChatIcon } from '@app/components/ChatIcon';
 import type { EmptyThreadProps, ThreadProps } from '@app/types';
 
 const EMPTY_SUGGESTIONS = [
-  'How do I download my policy document?',
-  'What documents are required to file a claim?',
-  'What is the premium grace period?',
+  'Download policy document',
+  'File a claim',
+  'Premium grace period',
 ] as const;
 
 const USER_DISPLAY_NAME = import.meta.env.VITE_USER_DISPLAY_NAME?.trim();
