@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 export type ChatIconName =
   | 'arrow-down'
   | 'close'
+  | 'collapse'
   | 'copy'
   | 'expand'
   | 'external-link'
@@ -31,11 +32,14 @@ export interface HomePageProps {
 }
 
 export interface FullscreenChatPageProps {
+  onCollapse: () => void;
   onClose: () => void;
   userType: UserType;
 }
 
 export interface AssistantModalProps {
+  open: boolean;
   userType: UserType | null;
+  onOpenChange: (open: boolean) => void;
   onExpand: () => void;
 }

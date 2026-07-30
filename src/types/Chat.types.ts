@@ -15,14 +15,14 @@ export interface ChatRequest {
 }
 
 export interface ModelTokenUsage {
-  model: string;
-  contextWindow: number;
-  inputTokens: number;
-  outputTokens: number;
+  model?: string;
+  contextWindow?: number;
+  inputTokens?: number;
+  outputTokens?: number;
   totalTokens: number;
-  contextTokensUsed: number;
-  contextTokensRemaining: number;
-  rateLimitRemainingTokens: number | null;
+  contextTokensUsed?: number;
+  contextTokensRemaining?: number;
+  rateLimitRemainingTokens?: number | null;
 }
 
 export interface ChatServerMessage {
@@ -59,6 +59,7 @@ export interface ChatRuntimeProviderProps {
 export interface ThreadProps {
   mode: ChatDisplayMode;
   onClose: () => void;
+  onCollapse?: () => void;
   onExpand?: () => void;
   userType?: UserType;
 }
@@ -71,6 +72,7 @@ export interface EmptyThreadProps {
 export interface HeaderProps {
   mode: ChatDisplayMode;
   onClose: () => void;
+  onCollapse?: () => void;
   onExpand?: () => void;
 }
 

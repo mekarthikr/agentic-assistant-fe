@@ -20,10 +20,7 @@ const CLIENT_SUGGESTIONS = [
   'Premium grace period',
 ] as const;
 
-const AGENT_SUGGESTIONS = [
-  'Product Features',
-  'Claim Documents',
-] as const;
+const AGENT_SUGGESTIONS = ['Product Features', 'Claim Documents'] as const;
 
 const getGreetingName = (userType?: UserType): string =>
   userType === 'client' ? 'Smith Robert' : 'Aarathi Ajith';
@@ -317,6 +314,7 @@ const ThreadActivity: React.FC = () => {
 export const Thread: React.FC<ThreadProps> = ({
   mode,
   onClose,
+  onCollapse,
   onExpand,
   userType,
 }) => {
@@ -333,7 +331,12 @@ export const Thread: React.FC<ThreadProps> = ({
           : 'relative flex h-full min-h-0 flex-col overflow-hidden bg-white text-slate-900'
       }
     >
-      <Header mode={mode} onClose={onClose} onExpand={onExpand} />
+      <Header
+        mode={mode}
+        onClose={onClose}
+        onCollapse={onCollapse}
+        onExpand={onExpand}
+      />
       <ThreadPrimitive.Root className="flex min-h-0 flex-1 flex-col">
         <ThreadPrimitive.Viewport
           className={

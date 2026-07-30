@@ -1,5 +1,5 @@
 import { AssistantModalPrimitive } from '@assistant-ui/react';
-import { lazy, Suspense, useState } from 'react';
+import { lazy, Suspense } from 'react';
 import type React from 'react';
 
 import { ChatIcon } from '@app/components/ChatIcon';
@@ -8,20 +8,20 @@ import type { AssistantModalProps } from '@app/types';
 const Thread = lazy(async () => await import('../Chat/Thread/Thread'));
 
 export const AssistantModal: React.FC<AssistantModalProps> = ({
+  open,
   userType,
+  onOpenChange,
   onExpand,
 }) => {
-  const [open, setOpen] = useState(false);
-
   if (!userType) return null;
 
   const expand = () => {
-    setOpen(false);
+    onOpenChange(false);
     onExpand();
   };
 
   return (
-    <AssistantModalPrimitive.Root open={open} onOpenChange={setOpen}>
+    <AssistantModalPrimitive.Root open={open} onOpenChange={onOpenChange}>
       <AssistantModalPrimitive.Trigger
         title="Open Agent Assist"
         aria-label="Open Agent Assist chat"
@@ -45,7 +45,7 @@ export const AssistantModal: React.FC<AssistantModalProps> = ({
         >
           <Thread
             mode="widget"
-            onClose={() => setOpen(false)}
+            onClose={() => onOpenChange(false)}
             onExpand={expand}
             userType={userType}
           />

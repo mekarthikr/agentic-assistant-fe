@@ -1,5 +1,11 @@
 import { AssistantRuntimeProvider, useLocalRuntime } from '@assistant-ui/react';
-import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from 'react';
 
 import { ChatSocketService, createWebSocketChatAdapter } from '@app/service';
 import type {
@@ -13,6 +19,7 @@ export const ChatRuntimeProvider = ({
   userType,
 }: ChatRuntimeProviderProps) => {
   const [chatSocketService] = useState(() => new ChatSocketService());
+  const previousUserType = useRef(userType);
   const adapter = useMemo(
     () => createWebSocketChatAdapter(chatSocketService, userType),
     [chatSocketService, userType],
@@ -32,6 +39,14 @@ export const ChatRuntimeProvider = ({
     void chatSocketService.connect().catch(() => undefined);
     return () => chatSocketService.close();
   }, [chatSocketService]);
+  useEffect(() => {
+    if (previousUserType.current === userType) return;
+
+    previousUserType.current = userType;
+    runtime.thread.cancelRun();
+    chatSocketService.resetConversation();
+    runtime.thread.reset();
+  }, [chatSocketService, runtime, userType]);
 
   const controls = useMemo<ChatControlContextValue>(
     () => ({

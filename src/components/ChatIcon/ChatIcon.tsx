@@ -14,6 +14,14 @@ export const ChatIcon: React.FC<ChatIconProps> = ({
         <path d="M18 6 6 18" />
       </>
     ),
+    collapse: (
+      <>
+        <path d="M4 14h6v6" />
+        <path d="m10 14-7 7" />
+        <path d="M20 10h-6V4" />
+        <path d="m14 10 7-7" />
+      </>
+    ),
     copy: (
       <>
         <rect width="13" height="13" x="9" y="9" rx="2" />

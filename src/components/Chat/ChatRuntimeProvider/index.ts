@@ -1,2 +1,2 @@
 export { ChatRuntimeProvider } from './ChatRuntimeProvider';
-export { ChatControlContext, useChatControl } from './ChatControlContext';
+export { useChatControl } from './ChatControlContext';

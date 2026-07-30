@@ -3,15 +3,65 @@ import type React from 'react';
 
 import { useChatControl } from '@app/components/Chat/ChatRuntimeProvider';
 import { ChatIcon } from '@app/components/ChatIcon';
-import type { HeaderProps } from '@app/types';
+import type { HeaderProps, ModelTokenUsage } from '@app/types';
 
 const TOKEN_FORMATTER = new Intl.NumberFormat('en-US');
 
-export const Header: React.FC<HeaderProps> = ({ mode, onClose, onExpand }) => {
+const formatTokenCount = (value: number | null | undefined): string | null =>
+  typeof value === 'number' && Number.isFinite(value)
+    ? TOKEN_FORMATTER.format(value)
+    : null;
+
+const getTokenUsageTitle = (tokenUsage: ModelTokenUsage): string => {
+  const inputTokens = formatTokenCount(tokenUsage.inputTokens);
+  const outputTokens = formatTokenCount(tokenUsage.outputTokens);
+  const contextTokensUsed = formatTokenCount(tokenUsage.contextTokensUsed);
+  const contextWindow = formatTokenCount(tokenUsage.contextWindow);
+  const details: string[] = [];
+
+  if (inputTokens !== null && outputTokens !== null) {
+    details.push(
+      `this turn used ${inputTokens} input and ${outputTokens} output tokens`,
+    );
+  }
+  if (contextTokensUsed !== null && contextWindow !== null) {
+    details.push(
+      `the final request used ${contextTokensUsed} of ${contextWindow} context tokens`,
+    );
+  }
+
+  const prefix = tokenUsage.model ? `${tokenUsage.model}: ` : '';
+  return `${prefix}${details.join('; ') || 'Token usage'}`;
+};
+
+export const Header: React.FC<HeaderProps> = ({
+  mode,
+  onClose,
+  onCollapse,
+  onExpand,
+}) => {
   const aui = useAui();
   const { connectionStatus, reconnect, resetConversation, tokenUsage } =
     useChatControl();
   const isConnected = connectionStatus === 'connected';
+  const totalTokens = formatTokenCount(tokenUsage?.totalTokens);
+  const contextTokensRemaining = formatTokenCount(
+    tokenUsage?.contextTokensRemaining,
+  );
+  const rateLimitRemainingTokens = formatTokenCount(
+    tokenUsage?.rateLimitRemainingTokens,
+  );
+  const tokenUsageText = [
+    totalTokens === null ? null : `Turn: ${totalTokens} tokens`,
+    contextTokensRemaining === null
+      ? null
+      : `Context: ${contextTokensRemaining} left`,
+    rateLimitRemainingTokens === null
+      ? null
+      : `TPM: ${rateLimitRemainingTokens} left`,
+  ]
+    .filter((part): part is string => part !== null)
+    .join(' | ');
 
   const startNewChat = () => {
     aui.thread().cancelRun();
@@ -66,19 +116,13 @@ export const Header: React.FC<HeaderProps> = ({ mode, onClose, onExpand }) => {
                 ? 'Connecting...'
                 : 'Reconnect chat'}
           </button>
-          {tokenUsage ? (
+          {tokenUsage && tokenUsageText ? (
             <p
               aria-live="polite"
-              title={`${tokenUsage.model}: this turn used ${TOKEN_FORMATTER.format(tokenUsage.inputTokens)} input and ${TOKEN_FORMATTER.format(tokenUsage.outputTokens)} output tokens; the final request used ${TOKEN_FORMATTER.format(tokenUsage.contextTokensUsed)} of ${TOKEN_FORMATTER.format(tokenUsage.contextWindow)} context tokens`}
+              title={getTokenUsageTitle(tokenUsage)}
               className="mt-0.5 truncate text-[10px] leading-3 text-slate-500"
             >
-              Turn: {TOKEN_FORMATTER.format(tokenUsage.totalTokens)} tokens
-              {' | '}
-              Context:{' '}
-              {TOKEN_FORMATTER.format(tokenUsage.contextTokensRemaining)} left
-              {tokenUsage.rateLimitRemainingTokens === null
-                ? null
-                : ` | TPM: ${TOKEN_FORMATTER.format(tokenUsage.rateLimitRemainingTokens)} left`}
+              {tokenUsageText}
             </p>
           ) : null}
         </div>
@@ -112,6 +156,17 @@ export const Header: React.FC<HeaderProps> = ({ mode, onClose, onExpand }) => {
             className="chat-icon-button"
           >
             <ChatIcon name="expand" className="size-4" />
+          </button>
+        ) : null}
+        {mode === 'fullscreen' && onCollapse ? (
+          <button
+            type="button"
+            onClick={onCollapse}
+            title="Collapse to floating widget"
+            aria-label="Collapse to floating widget"
+            className="chat-icon-button"
+          >
+            <ChatIcon name="collapse" className="size-4" />
           </button>
         ) : null}
         <button

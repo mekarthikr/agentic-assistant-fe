@@ -16,6 +16,7 @@ export const App = (): React.JSX.Element => {
   const [selectedUserType, setSelectedUserType] = useState<UserType | null>(
     'agent',
   );
+  const [isWidgetOpen, setIsWidgetOpen] = useState(false);
   const requestedUserType = new URLSearchParams(window.location.search).get(
     'userType',
   );
@@ -24,18 +25,25 @@ export const App = (): React.JSX.Element => {
       ? requestedUserType
       : null;
   const isChatPage = pathname === '/chat' && userType !== null;
+  const runtimeUserType: UserType =
+    isChatPage && userType ? userType : (selectedUserType ?? 'agent');
 
   return (
-    <ChatRuntimeProvider
-      key={userType ?? 'agent'}
-      userType={userType ?? 'agent'}
-    >
+    <ChatRuntimeProvider userType={runtimeUserType}>
       <AppLayout>
         {isChatPage ? (
           <Suspense fallback={<ChatPageLoading />}>
             <FullscreenChatPage
               userType={userType}
-              onClose={() => navigate('/')}
+              onCollapse={() => {
+                setSelectedUserType(userType);
+                setIsWidgetOpen(true);
+                navigate('/');
+              }}
+              onClose={() => {
+                setIsWidgetOpen(false);
+                navigate('/');
+              }}
             />
           </Suspense>
         ) : (
@@ -43,12 +51,18 @@ export const App = (): React.JSX.Element => {
             <HomePage
               userType={selectedUserType}
               onUserTypeChange={setSelectedUserType}
-              onOpenChat={(type) => navigate(`/chat?userType=${type}`)}
+              onOpenChat={(type) => {
+                setIsWidgetOpen(false);
+                navigate(`/chat?userType=${type}`);
+              }}
             />
             <AssistantModal
+              open={isWidgetOpen}
               userType={selectedUserType}
+              onOpenChange={setIsWidgetOpen}
               onExpand={() => {
                 if (selectedUserType) {
+                  setIsWidgetOpen(false);
                   navigate(`/chat?userType=${selectedUserType}`);
                 }
               }}
