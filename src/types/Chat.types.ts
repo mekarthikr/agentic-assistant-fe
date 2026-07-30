@@ -2,7 +2,7 @@ import type { AssistantRuntime } from '@assistant-ui/react';
 import type { ReactNode } from 'react';
 import type { UserType } from './Component.types';
 
-export type ChatDisplayMode = 'widget' | 'fullscreen';
+type ChatDisplayMode = 'widget' | 'fullscreen';
 
 export type ChatConnectionStatus =
   'connecting' | 'connected' | 'disconnected' | 'error';

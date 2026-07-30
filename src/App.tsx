@@ -29,7 +29,7 @@ export const App = (): React.JSX.Element => {
     isChatPage && userType ? userType : (selectedUserType ?? 'agent');
 
   return (
-    <ChatRuntimeProvider userType={runtimeUserType}>
+    <ChatRuntimeProvider key={runtimeUserType} userType={runtimeUserType}>
       <AppLayout>
         {isChatPage ? (
           <Suspense fallback={<ChatPageLoading />}>

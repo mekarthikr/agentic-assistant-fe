@@ -12,6 +12,49 @@ const HEARTBEAT_INTERVAL_MS = 20_000;
 const PONG_TIMEOUT_MS = 10_000;
 const DEFAULT_WEBSOCKET_URL = 'wss://agentic-assistant-be.vercel.app/ws';
 
+const getTokenCount = (value: unknown): number | undefined =>
+  typeof value === 'number' && Number.isSafeInteger(value) && value >= 0
+    ? value
+    : undefined;
+
+const normalizeTokenUsage = (value: unknown): ModelTokenUsage | null => {
+  if (!value || typeof value !== 'object') return null;
+
+  const usage = value as Record<string, unknown>;
+  const totalTokens = getTokenCount(usage.totalTokens);
+  if (totalTokens === undefined) return null;
+
+  const inputTokens = getTokenCount(usage.inputTokens);
+  const outputTokens = getTokenCount(usage.outputTokens);
+  const contextWindow = getTokenCount(usage.contextWindow);
+  const contextTokensUsed =
+    getTokenCount(usage.contextTokensUsed) ?? inputTokens;
+  const contextTokensRemaining =
+    getTokenCount(usage.contextTokensRemaining) ??
+    (contextWindow !== undefined && contextTokensUsed !== undefined
+      ? Math.max(contextWindow - contextTokensUsed, 0)
+      : undefined);
+  const rawRateLimitRemainingTokens =
+    usage.rateLimitRemainingTokens ?? usage.remainingTokens;
+  const rateLimitRemainingTokens =
+    rawRateLimitRemainingTokens === null
+      ? null
+      : getTokenCount(rawRateLimitRemainingTokens);
+
+  return {
+    totalTokens,
+    ...(typeof usage.model === 'string' ? { model: usage.model } : {}),
+    ...(contextWindow === undefined ? {} : { contextWindow }),
+    ...(inputTokens === undefined ? {} : { inputTokens }),
+    ...(outputTokens === undefined ? {} : { outputTokens }),
+    ...(contextTokensUsed === undefined ? {} : { contextTokensUsed }),
+    ...(contextTokensRemaining === undefined ? {} : { contextTokensRemaining }),
+    ...(rateLimitRemainingTokens === undefined
+      ? {}
+      : { rateLimitRemainingTokens }),
+  };
+};
+
 const getWebSocketUrl = (): string => {
   const configuredUrl = import.meta.env.VITE_WS_URL as string | undefined;
   if (configuredUrl) return configuredUrl;
@@ -122,7 +165,7 @@ export class ChatSocketService {
           request.deltas.push(payload.delta);
           request.wake?.();
         } else if (payload.type === 'chat.complete') {
-          if (payload.tokenUsage) this.setTokenUsage(payload.tokenUsage);
+          this.setTokenUsage(normalizeTokenUsage(payload.tokenUsage));
           request.done = true;
           request.wake?.();
         } else if (payload.type === 'chat.error') {

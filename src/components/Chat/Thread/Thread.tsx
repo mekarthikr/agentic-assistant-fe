@@ -311,7 +311,7 @@ const ThreadActivity: React.FC = () => {
   );
 };
 
-export const Thread: React.FC<ThreadProps> = ({
+const Thread: React.FC<ThreadProps> = ({
   mode,
   onClose,
   onCollapse,

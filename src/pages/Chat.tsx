@@ -1,6 +1,6 @@
 import type React from 'react';
 
-import { Thread } from '@app/components/Chat/Thread';
+import Thread from '@app/components/Chat/Thread/Thread';
 import type { FullscreenChatPageProps } from '@app/types';
 
 const FullscreenChatPage: React.FC<FullscreenChatPageProps> = ({

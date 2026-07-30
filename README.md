@@ -40,7 +40,7 @@ context capacity, and Groq's remaining per-minute token allowance.
 - `npm run format` checks formatting with Prettier.
 - `npm run format:fix` fixes formatting with Prettier.
 
-Staged files are automatically formatted and linted before each commit using Husky and lint-staged.
+The Husky pre-commit hook checks formatting, linting, and the production build.
 
 ## Author
 
