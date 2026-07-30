@@ -14,7 +14,7 @@ const FullscreenChatPage = lazy(async () => await import('./pages/Chat'));
 export const App = (): React.JSX.Element => {
   const { pathname, navigate } = usePathname();
   const [selectedUserType, setSelectedUserType] = useState<UserType | null>(
-    null,
+    'agent',
   );
   const requestedUserType = new URLSearchParams(window.location.search).get(
     'userType',
