@@ -1,11 +1,12 @@
-import { useState } from 'react';
 import type React from 'react';
 
-import type { HomePageProps, UserType } from '@app/types';
+import type { HomePageProps } from '@app/types';
 
-export const HomePage: React.FC<HomePageProps> = ({ onOpenChat }) => {
-  const [userType, setUserType] = useState<UserType>('agent');
-
+export const HomePage: React.FC<HomePageProps> = ({
+  userType,
+  onUserTypeChange,
+  onOpenChat,
+}) => {
   return (
     <main className="flex min-h-dvh items-center justify-center px-6 text-slate-900">
       <section className="mx-auto max-w-2xl text-center">
@@ -29,7 +30,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenChat }) => {
                   key={type}
                   type="button"
                   aria-pressed={selected}
-                  onClick={() => setUserType(type)}
+                  onClick={() => onUserTypeChange(type)}
                   className={`rounded-lg px-4 py-3 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0b3a66] ${
                     selected
                       ? 'bg-[#0b3a66] text-white shadow-sm'
@@ -44,10 +45,11 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenChat }) => {
         </fieldset>
         <button
           type="button"
-          onClick={() => onOpenChat(userType)}
-          className="mt-6 rounded-xl bg-[#0b3a66] px-5 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#082e52] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0b3a66]"
+          disabled={!userType}
+          onClick={() => userType && onOpenChat(userType)}
+          className="mt-6 rounded-xl bg-[#0b3a66] px-5 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#082e52] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0b3a66] disabled:cursor-not-allowed disabled:bg-slate-300"
         >
-          Continue as {userType === 'agent' ? 'Agent' : 'Client'}
+          {userType ? `Continue as ${userType === 'agent' ? 'Agent' : 'Client'}` : 'Select a user type'}
         </button>
       </section>
     </main>

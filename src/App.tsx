@@ -1,6 +1,7 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import type React from 'react';
 
+import { AssistantModal } from '@app/components/AssistantModal';
 import { ChatRuntimeProvider } from '@app/components/Chat/ChatRuntimeProvider';
 import { ChatPageLoading } from '@app/components/ChatPageLoading';
 import { usePathname } from '@app/hooks/usePathname';
@@ -12,6 +13,9 @@ const FullscreenChatPage = lazy(async () => await import('./pages/Chat'));
 
 export const App = (): React.JSX.Element => {
   const { pathname, navigate } = usePathname();
+  const [selectedUserType, setSelectedUserType] = useState<UserType | null>(
+    null,
+  );
   const requestedUserType = new URLSearchParams(window.location.search).get(
     'userType',
   );
@@ -35,7 +39,21 @@ export const App = (): React.JSX.Element => {
             />
           </Suspense>
         ) : (
-          <HomePage onOpenChat={(type) => navigate(`/chat?userType=${type}`)} />
+          <>
+            <HomePage
+              userType={selectedUserType}
+              onUserTypeChange={setSelectedUserType}
+              onOpenChat={(type) => navigate(`/chat?userType=${type}`)}
+            />
+            <AssistantModal
+              userType={selectedUserType}
+              onExpand={() => {
+                if (selectedUserType) {
+                  navigate(`/chat?userType=${selectedUserType}`);
+                }
+              }}
+            />
+          </>
         )}
       </AppLayout>
     </ChatRuntimeProvider>

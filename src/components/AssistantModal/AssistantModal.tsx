@@ -7,8 +7,13 @@ import type { AssistantModalProps } from '@app/types';
 
 const Thread = lazy(async () => await import('../Chat/Thread/Thread'));
 
-export const AssistantModal: React.FC<AssistantModalProps> = ({ onExpand }) => {
+export const AssistantModal: React.FC<AssistantModalProps> = ({
+  userType,
+  onExpand,
+}) => {
   const [open, setOpen] = useState(false);
+
+  if (!userType) return null;
 
   const expand = () => {
     setOpen(false);
@@ -42,6 +47,7 @@ export const AssistantModal: React.FC<AssistantModalProps> = ({ onExpand }) => {
             mode="widget"
             onClose={() => setOpen(false)}
             onExpand={expand}
+            userType={userType}
           />
         </Suspense>
       </AssistantModalPrimitive.Content>

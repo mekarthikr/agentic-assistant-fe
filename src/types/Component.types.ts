@@ -25,6 +25,8 @@ export interface AppLayoutProps {
 export type UserType = 'agent' | 'client';
 
 export interface HomePageProps {
+  userType: UserType | null;
+  onUserTypeChange: (userType: UserType) => void;
   onOpenChat: (userType: UserType) => void;
 }
 
@@ -34,5 +36,6 @@ export interface FullscreenChatPageProps {
 }
 
 export interface AssistantModalProps {
+  userType: UserType | null;
   onExpand: () => void;
 }
