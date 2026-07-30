@@ -1,4 +1,5 @@
 import type {
+  AuthenticatedChatSession,
   ChatConnectionStatus,
   ChatRequest,
   ChatServerMessage,
@@ -35,9 +36,12 @@ export class ChatSocketService {
   private conversationId = crypto.randomUUID();
   private tokenUsage: ModelTokenUsage | null = null;
   private readonly tokenUsageListeners = new Set<() => void>();
+  private session: AuthenticatedChatSession | null = null;
+  private readonly sessionListeners = new Set<() => void>();
 
   public getStatus = (): ChatConnectionStatus => this.status;
   public getTokenUsage = (): ModelTokenUsage | null => this.tokenUsage;
+  public getSession = (): AuthenticatedChatSession | null => this.session;
   public getConversationId = (): string => this.conversationId;
 
   public subscribe = (
@@ -52,17 +56,14 @@ export class ChatSocketService {
     return () => this.tokenUsageListeners.delete(listener);
   };
 
+  public subscribeSession = (listener: () => void): (() => void) => {
+    this.sessionListeners.add(listener);
+    return () => this.sessionListeners.delete(listener);
+  };
+
   public resetConversation = (): void => {
     this.conversationId = crypto.randomUUID();
-    if (!this.tokenUsage) return;
-
-    this.setTokenUsage({
-      ...this.tokenUsage,
-      inputTokens: 0,
-      outputTokens: 0,
-      totalTokens: 0,
-      remainingTokens: this.tokenUsage.contextWindow,
-    });
+    this.setTokenUsage(null);
   };
 
   private setStatus(status: ChatConnectionStatus): void {
@@ -70,9 +71,14 @@ export class ChatSocketService {
     for (const listener of this.statusListeners) listener(status);
   }
 
-  private setTokenUsage(tokenUsage: ModelTokenUsage): void {
+  private setTokenUsage(tokenUsage: ModelTokenUsage | null): void {
     this.tokenUsage = tokenUsage;
     for (const listener of this.tokenUsageListeners) listener();
+  }
+
+  private setSession(session: AuthenticatedChatSession | null): void {
+    this.session = session;
+    for (const listener of this.sessionListeners) listener();
   }
 
   public async connect(): Promise<void> {
@@ -104,30 +110,23 @@ export class ChatSocketService {
         if (!payload) return;
 
         if (payload.type === 'connection.ready') {
+          if (
+            !payload.session ||
+            (payload.session.role !== 'AGENT' &&
+              payload.session.role !== 'CLIENT') ||
+            typeof payload.session.displayName !== 'string'
+          ) {
+            socket.close(1008, 'Session context is unavailable');
+            reject(new Error('Your authenticated session is unavailable.'));
+            return;
+          }
+
+          this.setSession(payload.session);
           connectionReady = true;
           window.clearTimeout(timeout);
           this.reconnectAttempt = 0;
           this.setStatus('connected');
           this.startHeartbeat(socket);
-          if (
-            typeof payload.model === 'string' &&
-            typeof payload.contextWindow === 'number'
-          ) {
-            const current = this.tokenUsage;
-            this.setTokenUsage(
-              current?.model === payload.model &&
-                current.contextWindow === payload.contextWindow
-                ? current
-                : {
-                    model: payload.model,
-                    contextWindow: payload.contextWindow,
-                    inputTokens: 0,
-                    outputTokens: 0,
-                    totalTokens: 0,
-                    remainingTokens: payload.contextWindow,
-                  },
-            );
-          }
           resolve();
           return;
         }
@@ -257,6 +256,7 @@ export class ChatSocketService {
     this.socket?.close(1000, 'Client closed');
     this.socket = null;
     this.connectPromise = null;
+    this.setSession(null);
     this.setStatus('disconnected');
   }
 

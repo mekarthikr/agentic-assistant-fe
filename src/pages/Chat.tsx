@@ -5,14 +5,13 @@ import type { FullscreenChatPageProps } from '@app/types';
 
 export const FullscreenChatPage: React.FC<FullscreenChatPageProps> = ({
   onClose,
-  userType,
 }) => {
   return (
     <main
-      aria-label={`Full-screen ${userType} chat`}
+      aria-label="Full-screen assistant chat"
       className="h-dvh overflow-hidden bg-[#f7f9fc]"
     >
-      <Thread mode="fullscreen" onClose={onClose} userType={userType} />
+      <Thread mode="fullscreen" onClose={onClose} />
     </main>
   );
 };

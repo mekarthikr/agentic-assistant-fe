@@ -63,18 +63,22 @@ export const Header: React.FC<HeaderProps> = ({ mode, onClose, onExpand }) => {
             {isConnected
               ? 'Chat connected'
               : connectionStatus === 'connecting'
-                ? 'Connecting…'
-              : 'Reconnect chat'}
+                ? 'Connecting...'
+                : 'Reconnect chat'}
           </button>
           {tokenUsage ? (
             <p
               aria-live="polite"
-              title={`${tokenUsage.model}: ${TOKEN_FORMATTER.format(tokenUsage.inputTokens)} input tokens and ${TOKEN_FORMATTER.format(tokenUsage.outputTokens)} output tokens out of a ${TOKEN_FORMATTER.format(tokenUsage.contextWindow)}-token context window`}
+              title={`${tokenUsage.model}: this turn used ${TOKEN_FORMATTER.format(tokenUsage.inputTokens)} input and ${TOKEN_FORMATTER.format(tokenUsage.outputTokens)} output tokens; the final request used ${TOKEN_FORMATTER.format(tokenUsage.contextTokensUsed)} of ${TOKEN_FORMATTER.format(tokenUsage.contextWindow)} context tokens`}
               className="mt-0.5 truncate text-[10px] leading-3 text-slate-500"
             >
-              Tokens: {TOKEN_FORMATTER.format(tokenUsage.totalTokens)} used
-              {' · '}
-              {TOKEN_FORMATTER.format(tokenUsage.remainingTokens)} left
+              Turn: {TOKEN_FORMATTER.format(tokenUsage.totalTokens)} tokens
+              {' | '}
+              Context:{' '}
+              {TOKEN_FORMATTER.format(tokenUsage.contextTokensRemaining)} left
+              {tokenUsage.rateLimitRemainingTokens === null
+                ? null
+                : ` | TPM: ${TOKEN_FORMATTER.format(tokenUsage.rateLimitRemainingTokens)} left`}
             </p>
           ) : null}
         </div>

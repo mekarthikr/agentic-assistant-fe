@@ -11,8 +11,9 @@ import type React from 'react';
 import { Composer } from '@app/components/Chat/Composer';
 import { Header } from '@app/components/Chat/Header';
 import { MarkdownText } from '@app/components/Chat/MarkdownText';
+import { useChatControl } from '@app/components/Chat/ChatRuntimeProvider';
 import { ChatIcon } from '@app/components/ChatIcon';
-import type { EmptyThreadProps, ThreadProps, UserType } from '@app/types';
+import type { EmptyThreadProps, ThreadProps } from '@app/types';
 
 const CLIENT_SUGGESTIONS = [
   'Download policy document',
@@ -25,10 +26,6 @@ const AGENT_SUGGESTIONS = [
   'Claim Documents',
   'Premium Options',
 ] as const;
-
-const USER_DISPLAY_NAME = import.meta.env.VITE_USER_DISPLAY_NAME?.trim();
-const getGreetingName = (userType?: UserType): string =>
-  userType === 'client' ? 'Smith Robert' : USER_DISPLAY_NAME || 'User';
 
 const TIME_FORMATTER = new Intl.DateTimeFormat('en-US', {
   hour: 'numeric',
@@ -211,13 +208,14 @@ const ConversationDate: React.FC = () => {
   );
 };
 
-const EmptyThread: React.FC<EmptyThreadProps> = ({ mode, userType }) => {
+const EmptyThread: React.FC<EmptyThreadProps> = ({ mode }) => {
   const aui = useAui();
-  const greetingName = getGreetingName(userType);
+  const { session } = useChatControl();
+  const greetingName = session?.displayName || 'there';
   const assistantLabel = `Intellegent Assistant${
-    userType ? ` for ${userType === 'agent' ? 'Agent' : 'Client'}` : ''
+    session ? ` for ${session.role === 'AGENT' ? 'Agent' : 'Client'}` : ''
   }`;
-  const isClient = userType === 'client';
+  const isClient = session?.role === 'CLIENT';
   const suggestions = isClient ? CLIENT_SUGGESTIONS : AGENT_SUGGESTIONS;
   const helperText = isClient
     ? 'Get help with policy documents, claims, premium payments, beneficiaries, and customer support.'
@@ -275,9 +273,7 @@ const EmptyThread: React.FC<EmptyThreadProps> = ({ mode, userType }) => {
             <p className="font-medium text-slate-900">
               Hi {greetingName}, what can I help you find?
             </p>
-            <p className="mt-1">
-              {helperText}
-            </p>
+            <p className="mt-1">{helperText}</p>
           </div>
         </div>
       </div>
@@ -318,12 +314,7 @@ const ThreadActivity: React.FC = () => {
   );
 };
 
-export const Thread: React.FC<ThreadProps> = ({
-  mode,
-  onClose,
-  onExpand,
-  userType,
-}) => {
+export const Thread: React.FC<ThreadProps> = ({ mode, onClose, onExpand }) => {
   return (
     <section
       aria-label={
@@ -347,7 +338,7 @@ export const Thread: React.FC<ThreadProps> = ({
           }
         >
           <ThreadPrimitive.Empty>
-            <EmptyThread mode={mode} userType={userType} />
+            <EmptyThread mode={mode} />
           </ThreadPrimitive.Empty>
           {mode === 'widget' ? <ConversationDate /> : null}
           <ThreadPrimitive.Messages
