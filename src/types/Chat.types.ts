@@ -1,5 +1,6 @@
 import type { AssistantRuntime } from '@assistant-ui/react';
 import type { ReactNode } from 'react';
+import type { UserType } from './Component.types';
 
 export type ChatDisplayMode = 'widget' | 'fullscreen';
 
@@ -10,11 +11,7 @@ export interface ChatRequest {
   requestId: string;
   conversationId: string;
   message: string;
-}
-
-export interface AuthenticatedChatSession {
-  role: 'AGENT' | 'CLIENT';
-  displayName: string;
+  userType: UserType;
 }
 
 export interface ModelTokenUsage {
@@ -37,7 +34,6 @@ export interface ChatServerMessage {
   model?: string;
   contextWindow?: number;
   tokenUsage?: ModelTokenUsage;
-  session?: AuthenticatedChatSession;
 }
 
 export interface PendingChatRequest {
@@ -50,7 +46,6 @@ export interface PendingChatRequest {
 export interface ChatControlContextValue {
   connectionStatus: ChatConnectionStatus;
   tokenUsage: ModelTokenUsage | null;
-  session: AuthenticatedChatSession | null;
   reconnect: () => Promise<void>;
   resetConversation: () => void;
   runtime: AssistantRuntime;
@@ -58,16 +53,19 @@ export interface ChatControlContextValue {
 
 export interface ChatRuntimeProviderProps {
   children: ReactNode;
+  userType: UserType;
 }
 
 export interface ThreadProps {
   mode: ChatDisplayMode;
   onClose: () => void;
   onExpand?: () => void;
+  userType?: UserType;
 }
 
 export interface EmptyThreadProps {
   mode: ChatDisplayMode;
+  userType?: UserType;
 }
 
 export interface HeaderProps {

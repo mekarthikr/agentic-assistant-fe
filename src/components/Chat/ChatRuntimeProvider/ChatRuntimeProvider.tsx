@@ -8,11 +8,14 @@ import type {
 } from '@app/types';
 import { ChatControlContext } from './ChatControlContext';
 
-export const ChatRuntimeProvider = ({ children }: ChatRuntimeProviderProps) => {
+export const ChatRuntimeProvider = ({
+  children,
+  userType,
+}: ChatRuntimeProviderProps) => {
   const [chatSocketService] = useState(() => new ChatSocketService());
   const adapter = useMemo(
-    () => createWebSocketChatAdapter(chatSocketService),
-    [chatSocketService],
+    () => createWebSocketChatAdapter(chatSocketService, userType),
+    [chatSocketService, userType],
   );
   const runtime = useLocalRuntime(adapter);
   const connectionStatus = useSyncExternalStore(
@@ -25,12 +28,6 @@ export const ChatRuntimeProvider = ({ children }: ChatRuntimeProviderProps) => {
     chatSocketService.getTokenUsage,
     chatSocketService.getTokenUsage,
   );
-  const session = useSyncExternalStore(
-    chatSocketService.subscribeSession,
-    chatSocketService.getSession,
-    chatSocketService.getSession,
-  );
-
   useEffect(() => {
     void chatSocketService.connect().catch(() => undefined);
     return () => chatSocketService.close();
@@ -40,12 +37,11 @@ export const ChatRuntimeProvider = ({ children }: ChatRuntimeProviderProps) => {
     () => ({
       connectionStatus,
       tokenUsage,
-      session,
       reconnect: () => chatSocketService.connect(),
       resetConversation: chatSocketService.resetConversation,
       runtime,
     }),
-    [chatSocketService, connectionStatus, runtime, session, tokenUsage],
+    [chatSocketService, connectionStatus, runtime, tokenUsage],
   );
 
   return (

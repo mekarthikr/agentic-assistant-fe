@@ -11,9 +11,8 @@ import type React from 'react';
 import { Composer } from '@app/components/Chat/Composer';
 import { Header } from '@app/components/Chat/Header';
 import { MarkdownText } from '@app/components/Chat/MarkdownText';
-import { useChatControl } from '@app/components/Chat/ChatRuntimeProvider';
 import { ChatIcon } from '@app/components/ChatIcon';
-import type { EmptyThreadProps, ThreadProps } from '@app/types';
+import type { EmptyThreadProps, ThreadProps, UserType } from '@app/types';
 
 const CLIENT_SUGGESTIONS = [
   'Download policy document',
@@ -26,6 +25,9 @@ const AGENT_SUGGESTIONS = [
   'Claim Documents',
   'Premium Options',
 ] as const;
+
+const getGreetingName = (userType?: UserType): string =>
+  userType === 'client' ? 'Smith Robert' : 'Aarathi Ajith';
 
 const TIME_FORMATTER = new Intl.DateTimeFormat('en-US', {
   hour: 'numeric',
@@ -208,14 +210,13 @@ const ConversationDate: React.FC = () => {
   );
 };
 
-const EmptyThread: React.FC<EmptyThreadProps> = ({ mode }) => {
+const EmptyThread: React.FC<EmptyThreadProps> = ({ mode, userType }) => {
   const aui = useAui();
-  const { session } = useChatControl();
-  const greetingName = session?.displayName || 'there';
-  const assistantLabel = `Intellegent Assistant${
-    session ? ` for ${session.role === 'AGENT' ? 'Agent' : 'Client'}` : ''
+  const greetingName = getGreetingName(userType);
+  const isClient = userType === 'client';
+  const assistantLabel = `Intellegent Assistant for ${
+    isClient ? 'Client' : 'Agent'
   }`;
-  const isClient = session?.role === 'CLIENT';
   const suggestions = isClient ? CLIENT_SUGGESTIONS : AGENT_SUGGESTIONS;
   const helperText = isClient
     ? 'Get help with policy documents, claims, premium payments, beneficiaries, and customer support.'
@@ -314,7 +315,12 @@ const ThreadActivity: React.FC = () => {
   );
 };
 
-export const Thread: React.FC<ThreadProps> = ({ mode, onClose, onExpand }) => {
+export const Thread: React.FC<ThreadProps> = ({
+  mode,
+  onClose,
+  onExpand,
+  userType,
+}) => {
   return (
     <section
       aria-label={
@@ -338,7 +344,7 @@ export const Thread: React.FC<ThreadProps> = ({ mode, onClose, onExpand }) => {
           }
         >
           <ThreadPrimitive.Empty>
-            <EmptyThread mode={mode} />
+            <EmptyThread mode={mode} userType={userType} />
           </ThreadPrimitive.Empty>
           {mode === 'widget' ? <ConversationDate /> : null}
           <ThreadPrimitive.Messages
