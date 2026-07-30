@@ -23,7 +23,6 @@ const CLIENT_SUGGESTIONS = [
 const AGENT_SUGGESTIONS = [
   'Product Features',
   'Claim Documents',
-  'Premium Options',
 ] as const;
 
 const USER_DISPLAY_NAME = import.meta.env.VITE_USER_DISPLAY_NAME?.trim();
