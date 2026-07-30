@@ -54,15 +54,7 @@ export class ChatSocketService {
 
   public resetConversation = (): void => {
     this.conversationId = crypto.randomUUID();
-    if (!this.tokenUsage) return;
-
-    this.setTokenUsage({
-      ...this.tokenUsage,
-      inputTokens: 0,
-      outputTokens: 0,
-      totalTokens: 0,
-      remainingTokens: this.tokenUsage.contextWindow,
-    });
+    this.setTokenUsage(null);
   };
 
   private setStatus(status: ChatConnectionStatus): void {
@@ -70,7 +62,7 @@ export class ChatSocketService {
     for (const listener of this.statusListeners) listener(status);
   }
 
-  private setTokenUsage(tokenUsage: ModelTokenUsage): void {
+  private setTokenUsage(tokenUsage: ModelTokenUsage | null): void {
     this.tokenUsage = tokenUsage;
     for (const listener of this.tokenUsageListeners) listener();
   }
@@ -109,25 +101,6 @@ export class ChatSocketService {
           this.reconnectAttempt = 0;
           this.setStatus('connected');
           this.startHeartbeat(socket);
-          if (
-            typeof payload.model === 'string' &&
-            typeof payload.contextWindow === 'number'
-          ) {
-            const current = this.tokenUsage;
-            this.setTokenUsage(
-              current?.model === payload.model &&
-                current.contextWindow === payload.contextWindow
-                ? current
-                : {
-                    model: payload.model,
-                    contextWindow: payload.contextWindow,
-                    inputTokens: 0,
-                    outputTokens: 0,
-                    totalTokens: 0,
-                    remainingTokens: payload.contextWindow,
-                  },
-            );
-          }
           resolve();
           return;
         }

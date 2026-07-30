@@ -25,9 +25,8 @@ const AGENT_SUGGESTIONS = [
   'Claim Documents',
 ] as const;
 
-const USER_DISPLAY_NAME = import.meta.env.VITE_USER_DISPLAY_NAME?.trim();
 const getGreetingName = (userType?: UserType): string =>
-  userType === 'client' ? 'Smith Robert' : USER_DISPLAY_NAME || 'User';
+  userType === 'client' ? 'Smith Robert' : 'Aarathi Ajith';
 
 const TIME_FORMATTER = new Intl.DateTimeFormat('en-US', {
   hour: 'numeric',
@@ -213,10 +212,10 @@ const ConversationDate: React.FC = () => {
 const EmptyThread: React.FC<EmptyThreadProps> = ({ mode, userType }) => {
   const aui = useAui();
   const greetingName = getGreetingName(userType);
-  const assistantLabel = `Intellegent Assistant${
-    userType ? ` for ${userType === 'agent' ? 'Agent' : 'Client'}` : ''
-  }`;
   const isClient = userType === 'client';
+  const assistantLabel = `Intellegent Assistant for ${
+    isClient ? 'Client' : 'Agent'
+  }`;
   const suggestions = isClient ? CLIENT_SUGGESTIONS : AGENT_SUGGESTIONS;
   const helperText = isClient
     ? 'Get help with policy documents, claims, premium payments, beneficiaries, and customer support.'
@@ -274,9 +273,7 @@ const EmptyThread: React.FC<EmptyThreadProps> = ({ mode, userType }) => {
             <p className="font-medium text-slate-900">
               Hi {greetingName}, what can I help you find?
             </p>
-            <p className="mt-1">
-              {helperText}
-            </p>
+            <p className="mt-1">{helperText}</p>
           </div>
         </div>
       </div>

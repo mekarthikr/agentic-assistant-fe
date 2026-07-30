@@ -18,13 +18,17 @@ npm run dev
 The chat UI connects to `https://agentic-assistant-be.vercel.app/` over a native
 browser WebSocket at `wss://agentic-assistant-be.vercel.app/ws`. Configure
 `VITE_WS_URL` to override that endpoint. If backend authentication is enabled,
-set `VITE_WS_AUTH_TOKEN` to the matching `SOCKET_AUTH_TOKEN`.
-Set `VITE_USER_DISPLAY_NAME` to show a name in the chat greeting.
+set `VITE_WS_AUTH_TOKEN` to the backend's optional shared
+`SOCKET_AUTH_TOKEN`.
 
 The assistant-ui runtime is provided by `ChatRuntimeProvider`. Its
-`ChatControlContext` exposes the connection status, reconnect action, and chat
-runtime to UI components. Chat responses are streamed from the backend; the UI
-does not contain mock messages or a mock model adapter.
+`ChatControlContext` exposes connection status, reconnect action, and chat
+runtime to UI components. The home-page toggle selects Agent or Client and
+each chat request carries that selection. The backend maps it to the
+hardcoded profile and data scope. Chat responses are streamed from the
+backend; the UI does not contain mock messages or a mock model adapter. After
+each response, the header distinguishes aggregate turn usage, final-request
+context capacity, and Groq's remaining per-minute token allowance.
 
 ## Available scripts
 

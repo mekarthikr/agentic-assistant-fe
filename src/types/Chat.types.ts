@@ -20,7 +20,9 @@ export interface ModelTokenUsage {
   inputTokens: number;
   outputTokens: number;
   totalTokens: number;
-  remainingTokens: number;
+  contextTokensUsed: number;
+  contextTokensRemaining: number;
+  rateLimitRemainingTokens: number | null;
 }
 
 export interface ChatServerMessage {

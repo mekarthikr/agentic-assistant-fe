@@ -28,7 +28,6 @@ export const ChatRuntimeProvider = ({
     chatSocketService.getTokenUsage,
     chatSocketService.getTokenUsage,
   );
-
   useEffect(() => {
     void chatSocketService.connect().catch(() => undefined);
     return () => chatSocketService.close();

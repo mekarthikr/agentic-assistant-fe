@@ -44,11 +44,10 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenChat }) => {
         </fieldset>
         <button
           type="button"
-          disabled={!userType}
-          onClick={() => userType && onOpenChat(userType)}
-          className="mt-6 rounded-xl bg-[#0b3a66] px-5 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#082e52] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0b3a66] disabled:cursor-not-allowed disabled:bg-slate-300"
+          onClick={() => onOpenChat(userType)}
+          className="mt-6 rounded-xl bg-[#0b3a66] px-5 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#082e52] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0b3a66]"
         >
-          {userType ? `Continue as ${userType === 'agent' ? 'Agent' : 'Client'}` : 'Select a user type'}
+          Continue as {userType === 'agent' ? 'Agent' : 'Client'}
         </button>
       </section>
     </main>
