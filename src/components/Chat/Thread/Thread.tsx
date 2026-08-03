@@ -210,7 +210,7 @@ const EmptyThread: React.FC<EmptyThreadProps> = ({ mode, userType }) => {
   const aui = useAui();
   const greetingName = getGreetingName(userType);
   const isClient = userType === 'client';
-  const assistantLabel = `Intellegent Assistant for ${
+  const assistantLabel = `Intelligent Assistant for ${
     isClient ? 'Client' : 'Agent'
   }`;
   const suggestions = isClient ? CLIENT_SUGGESTIONS : AGENT_SUGGESTIONS;

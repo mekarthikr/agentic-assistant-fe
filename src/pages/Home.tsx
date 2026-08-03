@@ -11,15 +11,12 @@ export const HomePage: React.FC<HomePageProps> = ({
     <main className="flex min-h-dvh items-center justify-center px-6 text-slate-900">
       <section className="mx-auto max-w-2xl text-center">
         <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
-          Intellegent Assistant
+          Intelligent Assistant
         </h1>
         <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-slate-600">
-          A focused workspace for product, contract, and case questions.
+          A focused workspace for product, contract, and premium.
         </p>
         <fieldset className="mx-auto mt-8 max-w-md">
-          <legend className="text-sm font-semibold text-slate-700">
-            Continue as
-          </legend>
           <div className="mt-3 grid grid-cols-2 rounded-xl border border-slate-200 bg-white p-1 shadow-sm">
             {(['agent', 'client'] as const).map((type) => {
               const selected = userType === type;
