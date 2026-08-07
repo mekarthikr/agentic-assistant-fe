@@ -1,5 +1,5 @@
 import type { ChatModelAdapter, ThreadMessage } from '@assistant-ui/react';
-import type { UserType } from '@app/types';
+import type { ChatSource, UserType } from '@app/types';
 import type { ChatSocketService } from './ChatSocket.service';
 
 const getText = (message: ThreadMessage): string =>
@@ -8,6 +8,18 @@ const getText = (message: ThreadMessage): string =>
     .map((part) => part.text)
     .join('\n')
     .trim();
+
+const toSourcePart = (source: ChatSource) => ({
+  type: 'source' as const,
+  sourceType: 'document' as const,
+  id: source.id,
+  title:
+    source.page === undefined
+      ? source.title
+      : `${source.title} · Page ${source.page}`,
+  filename: source.filename,
+  mediaType: source.mediaType,
+});
 
 export const createWebSocketChatAdapter = (
   chatSocketService: ChatSocketService,
@@ -27,9 +39,10 @@ export const createWebSocketChatAdapter = (
     }
 
     let response = '';
+    let sources: ChatSource[] = [];
 
     try {
-      for await (const delta of chatSocketService.stream(
+      for await (const event of chatSocketService.stream(
         {
           requestId: crypto.randomUUID(),
           conversationId: chatSocketService.getConversationId(),
@@ -38,16 +51,23 @@ export const createWebSocketChatAdapter = (
         },
         abortSignal,
       )) {
-        response += delta;
-        yield {
-          content: [{ type: 'text', text: response }],
-          status: { type: 'running' },
-        };
+        if (event.type === 'complete') {
+          sources = event.sources;
+        } else {
+          response += event.delta;
+          yield {
+            content: [{ type: 'text', text: response }],
+            status: { type: 'running' },
+          };
+        }
       }
 
       if (!abortSignal.aborted) {
         yield {
-          content: [{ type: 'text', text: response }],
+          content: [
+            { type: 'text', text: response },
+            ...sources.map(toSourcePart),
+          ],
           status: { type: 'complete', reason: 'stop' },
         };
       }

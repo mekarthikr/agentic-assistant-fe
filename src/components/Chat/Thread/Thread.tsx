@@ -51,17 +51,18 @@ const SourcePill: React.FC<SourceMessagePartProps> = ({
         href={url}
         target="_blank"
         rel="noreferrer noopener"
-        className="mt-3 inline-flex max-w-full items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-[#0b3a66] transition-colors hover:bg-[#eaf3fb] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0b3a66]"
+        className="mt-3 mr-2 inline-flex max-w-full items-center gap-1.5 rounded-full border border-sky-200 bg-sky-50 px-3 py-1.5 text-xs font-medium text-[#0b3a66] transition-colors hover:bg-[#eaf3fb] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0b3a66]"
       >
-        <span className="truncate">{label}</span>
+        <span className="truncate">Source · {label}</span>
         <ChatIcon name="external-link" className="size-3.5 shrink-0" />
       </a>
     );
   }
 
   return (
-    <span className="mt-3 inline-flex max-w-full rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-[#0b3a66]">
-      <span className="truncate">{label}</span>
+    <span className="mt-3 mr-2 inline-flex max-w-full items-center gap-1.5 rounded-full border border-sky-200 bg-sky-50 px-3 py-1.5 text-xs font-medium text-[#0b3a66]">
+      <ChatIcon name="shield" className="size-3.5 shrink-0" />
+      <span className="truncate">Source · {label}</span>
     </span>
   );
 };
