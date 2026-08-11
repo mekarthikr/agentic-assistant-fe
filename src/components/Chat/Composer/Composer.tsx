@@ -45,7 +45,7 @@ export const Composer: React.FC<ComposerProps> = ({ mode }) => {
           submitMode="enter"
           maxLength={MAX_MESSAGE_LENGTH}
           rows={1}
-          placeholder="Ask about a contract, product, or case..."
+          placeholder="Ask about a contract, product, or premium..."
           aria-describedby="composer-help composer-validation composer-counter"
           className="col-start-1 row-start-1 max-h-36 min-h-9 w-full resize-none overflow-y-auto bg-transparent px-2 pt-2 pb-0 text-[15px] leading-6 text-slate-900 outline-none placeholder:text-slate-400 disabled:cursor-not-allowed disabled:opacity-60"
           disabled={isDisabled}
