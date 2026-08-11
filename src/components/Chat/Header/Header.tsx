@@ -69,6 +69,11 @@ export const Header: React.FC<HeaderProps> = ({
     aui.thread().reset();
   };
 
+  const closeChat = () => {
+    startNewChat();
+    onClose();
+  };
+
   return (
     <header
       className={
@@ -171,7 +176,7 @@ export const Header: React.FC<HeaderProps> = ({
         ) : null}
         <button
           type="button"
-          onClick={onClose}
+          onClick={closeChat}
           title={mode === 'widget' ? 'Close assistant' : 'Return to home'}
           aria-label={mode === 'widget' ? 'Close assistant' : 'Return to home'}
           className="chat-icon-button"
