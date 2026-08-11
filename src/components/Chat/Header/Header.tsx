@@ -78,22 +78,22 @@ export const Header: React.FC<HeaderProps> = ({
     <header
       className={
         mode === 'fullscreen'
-          ? 'pointer-events-none absolute inset-x-0 top-0 z-20 flex items-center justify-between gap-3 px-5 pt-4 sm:px-6'
-          : 'flex min-h-16 shrink-0 items-center justify-between gap-3 border-b border-slate-200/80 bg-white px-4 sm:px-5'
+          ? 'pointer-events-none absolute inset-x-0 top-0 z-20 flex items-center justify-between gap-3 px-4 pt-4 sm:px-6'
+          : 'flex min-h-[4.5rem] shrink-0 items-center justify-between gap-3 border-b border-slate-200/70 bg-white px-4 sm:px-5'
       }
     >
       <div
         className={
           mode === 'fullscreen'
-            ? 'pointer-events-auto flex min-w-0 items-center gap-3 rounded-2xl border border-slate-200/80 bg-white p-2 pr-4 shadow-[0_2px_8px_rgba(15,23,42,0.08)]'
+            ? 'pointer-events-auto flex min-w-0 items-center gap-3 rounded-2xl border border-slate-200 bg-white p-2 pr-4 shadow-sm'
             : 'flex min-w-0 items-center gap-3'
         }
       >
         <span
           className={
             mode === 'fullscreen'
-              ? 'grid size-9 shrink-0 place-items-center rounded-[10px] border border-sky-100 bg-[#eaf3fb] text-[#0b3a66]'
-              : 'grid size-9 shrink-0 place-items-center rounded-[11px] bg-[#eaf3fb] text-[#0b3a66]'
+              ? 'grid size-9 shrink-0 place-items-center rounded-xl bg-[#0b3a66] text-white shadow-sm'
+              : 'grid size-9 shrink-0 place-items-center rounded-xl bg-[#0b3a66] text-white shadow-sm'
           }
         >
           <ChatIcon name="shield" className="size-[18px]" />
@@ -104,12 +104,12 @@ export const Header: React.FC<HeaderProps> = ({
             disabled={isConnected || connectionStatus === 'connecting'}
             onClick={() => void reconnect().catch(() => undefined)}
             title={isConnected ? 'Chat service connected' : 'Reconnect chat'}
-            className="flex items-center gap-1.5 text-[10px] leading-3 text-slate-500 disabled:cursor-default"
+            className="flex items-center gap-1.5 text-[11px] font-medium leading-3 text-slate-600 disabled:cursor-default"
           >
             <span
               className={`size-1.5 shrink-0 rounded-full ${
                 isConnected
-                  ? 'bg-emerald-500'
+                  ? 'status-pulse bg-emerald-500'
                   : connectionStatus === 'connecting'
                     ? 'animate-pulse bg-amber-400'
                     : 'bg-red-500'
@@ -136,7 +136,7 @@ export const Header: React.FC<HeaderProps> = ({
       <div
         className={
           mode === 'fullscreen'
-            ? 'pointer-events-auto flex shrink-0 items-center gap-1 rounded-2xl border border-slate-200/80 bg-white p-1.5 shadow-[0_2px_8px_rgba(15,23,42,0.08)]'
+            ? 'pointer-events-auto flex shrink-0 items-center gap-1 rounded-2xl border border-slate-200 bg-white p-1.5 shadow-sm'
             : 'flex shrink-0 items-center gap-0.5'
         }
       >

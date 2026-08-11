@@ -11,7 +11,7 @@ const FullscreenChatPage: React.FC<FullscreenChatPageProps> = ({
   return (
     <main
       aria-label={`Full-screen ${userType} chat`}
-      className="h-dvh overflow-hidden bg-[#f7f9fc]"
+      className="h-dvh overflow-hidden bg-[#f4f7fb]"
     >
       <Thread
         mode="fullscreen"

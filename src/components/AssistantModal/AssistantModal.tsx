@@ -23,22 +23,25 @@ export const AssistantModal: React.FC<AssistantModalProps> = ({
   return (
     <AssistantModalPrimitive.Root open={open} onOpenChange={onOpenChange}>
       <AssistantModalPrimitive.Trigger
-        title="Open Agent Assist"
-        aria-label="Open Agent Assist chat"
-        className="fixed right-4 bottom-4 z-40 grid size-14 place-items-center rounded-2xl bg-[#0b3a66] text-white shadow-[0_14px_35px_rgba(11,58,102,0.3)] transition-transform hover:-translate-y-1 hover:bg-[#082e52] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0b3a66] motion-reduce:transform-none sm:right-6 sm:bottom-6"
+        title="Open Intelligent Assistant"
+        aria-label="Open Intelligent Assistant chat"
+        className="group fixed right-4 bottom-4 z-40 grid size-12 place-items-center rounded-xl border border-[#0b3a66] bg-[#0b3a66] text-white shadow-[0_6px_16px_rgba(11,58,102,0.2)] transition-colors hover:bg-[#072b4d] focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#1677a2] sm:right-6 sm:bottom-6"
       >
-        <ChatIcon name="sparkles" className="size-6" />
+        <span className="relative">
+          <ChatIcon name="sparkles" className="size-5" />
+          <span className="status-pulse absolute -top-1 -right-1 size-2 rounded-full border border-[#0b3a66] bg-emerald-400" />
+        </span>
       </AssistantModalPrimitive.Trigger>
       <AssistantModalPrimitive.Content
         side="top"
         align="end"
         sideOffset={12}
-        aria-label="Agent Assist chat dialog"
-        className="z-50 h-[min(620px,calc(100dvh-7.5rem))] w-[calc(100vw-1rem)] overflow-hidden rounded-[22px] border border-slate-200/90 bg-white shadow-[0_28px_80px_rgba(15,23,42,0.22)] outline-none sm:w-[420px]"
+        aria-label="Intelligent Assistant chat dialog"
+        className="z-50 h-[min(680px,calc(100dvh-6.5rem))] w-[calc(100vw-1rem)] overflow-hidden rounded-[24px] border border-white/80 bg-white shadow-[0_32px_90px_rgba(15,23,42,0.24)] ring-1 ring-slate-900/5 outline-none sm:w-[440px]"
       >
         <Suspense
           fallback={
-            <div className="grid h-full place-items-center bg-[#f7f9fc] text-sm text-slate-500">
+            <div className="app-canvas grid h-full place-items-center text-sm font-medium text-slate-500">
               <span aria-live="polite">Loading assistant…</span>
             </div>
           }

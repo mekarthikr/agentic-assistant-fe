@@ -20,7 +20,12 @@ const CLIENT_SUGGESTIONS = [
   'Premium grace period',
 ] as const;
 
-const AGENT_SUGGESTIONS = ['Product Features', 'Claim Documents'] as const;
+const AGENT_SUGGESTIONS = [
+  'Product features',
+  'Claim documents',
+  'Transfer procedures',
+  'Contract details',
+] as const;
 
 const getGreetingName = (userType?: UserType): string =>
   userType === 'client' ? 'Smith Robert' : 'Aarathi Ajith';
@@ -51,7 +56,7 @@ const SourcePill: React.FC<SourceMessagePartProps> = ({
         href={url}
         target="_blank"
         rel="noreferrer noopener"
-        className="mt-3 mr-2 inline-flex max-w-full items-center gap-1.5 rounded-full border border-sky-200 bg-sky-50 px-3 py-1.5 text-xs font-medium text-[#0b3a66] transition-colors hover:bg-[#eaf3fb] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0b3a66]"
+        className="mt-3 mr-2 inline-flex max-w-full items-center gap-1.5 rounded-lg border border-sky-200/80 bg-sky-50 px-2.5 py-1.5 text-xs font-medium text-[#0b3a66] transition-colors hover:border-sky-300 hover:bg-[#e8f1f8] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1677a2]"
       >
         <span className="truncate">Source · {label}</span>
         <ChatIcon name="external-link" className="size-3.5 shrink-0" />
@@ -60,7 +65,7 @@ const SourcePill: React.FC<SourceMessagePartProps> = ({
   }
 
   return (
-    <span className="mt-3 mr-2 inline-flex max-w-full items-center gap-1.5 rounded-full border border-sky-200 bg-sky-50 px-3 py-1.5 text-xs font-medium text-[#0b3a66]">
+    <span className="mt-3 mr-2 inline-flex max-w-full items-center gap-1.5 rounded-lg border border-sky-200/80 bg-sky-50 px-2.5 py-1.5 text-xs font-medium text-[#0b3a66]">
       <ChatIcon name="shield" className="size-3.5 shrink-0" />
       <span className="truncate">Source · {label}</span>
     </span>
@@ -72,7 +77,7 @@ const MessageActions: React.FC = () => {
     <ActionBarPrimitive.Root
       hideWhenRunning
       autohide="never"
-      className="pointer-events-none mt-2 flex h-8 gap-1 opacity-0 transition-opacity group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100"
+      className="pointer-events-none mt-1.5 flex h-8 gap-1 opacity-0 transition-opacity group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100"
     >
       <ActionBarPrimitive.Copy
         title="Copy response"
@@ -99,8 +104,8 @@ const WidgetAssistantMessage: React.FC = () => {
   if (!hasContent) return null;
 
   return (
-    <MessagePrimitive.Root className="group mx-auto grid w-full max-w-[52rem] grid-cols-[1.75rem_minmax(0,1fr)] gap-2.5 px-3 py-2.5 sm:grid-cols-[2rem_minmax(0,1fr)] sm:px-5 sm:py-3">
-      <span className="mt-5 grid size-7 place-items-center rounded-full bg-[#0b3a66] text-white shadow-sm sm:size-8">
+    <MessagePrimitive.Root className="chat-message group mx-auto grid w-full max-w-[52rem] grid-cols-[1.75rem_minmax(0,1fr)] gap-2.5 px-3 py-2.5 sm:grid-cols-[2rem_minmax(0,1fr)] sm:px-5 sm:py-3">
+      <span className="mt-5 grid size-7 place-items-center rounded-xl bg-[#0b3a66] text-white shadow-sm sm:size-8">
         <ChatIcon name="sparkles" className="size-3.5 sm:size-4" />
       </span>
       <div className="min-w-0">
@@ -108,7 +113,7 @@ const WidgetAssistantMessage: React.FC = () => {
           Agent Assist
         </p>
         <div className="flex min-w-0 items-end gap-2">
-          <div className="min-w-0 max-w-full rounded-[18px] rounded-bl-md bg-[#eaf3fb] px-3.5 py-2.5 text-[13px] leading-6 text-slate-700 shadow-[0_1px_2px_rgba(15,23,42,0.04)] min-[360px]:max-w-[calc(100%-3.5rem)] sm:max-w-[85%] sm:text-sm sm:leading-7">
+          <div className="min-w-0 max-w-full rounded-[18px] rounded-bl-md border border-sky-100/80 bg-[#e8f1f8] px-3.5 py-2.5 text-[13px] leading-6 text-slate-700 shadow-[0_1px_2px_rgba(15,23,42,0.04)] min-[360px]:max-w-[calc(100%-3.5rem)] sm:max-w-[85%] sm:text-sm sm:leading-7">
             <MessagePrimitive.Parts components={assistantMessageComponents} />
           </div>
           <time
@@ -128,9 +133,9 @@ const WidgetUserMessage: React.FC = () => {
   const createdAt = useAuiState((state) => state.message.createdAt);
 
   return (
-    <MessagePrimitive.Root className="mx-auto flex w-full max-w-[52rem] justify-end px-3 py-2.5 sm:px-5 sm:py-3">
+    <MessagePrimitive.Root className="chat-message mx-auto flex w-full max-w-[52rem] justify-end px-3 py-2.5 sm:px-5 sm:py-3">
       <div className="flex max-w-[86%] flex-col items-end sm:max-w-[72%]">
-        <div className="overflow-hidden rounded-[18px] rounded-br-md bg-[#0b3a66] px-3.5 py-2.5 text-[13px] leading-5 break-words whitespace-pre-wrap text-white shadow-sm sm:text-sm sm:leading-6">
+        <div className="overflow-hidden rounded-[18px] rounded-br-md bg-[#0b3a66] px-3.5 py-2.5 text-[13px] leading-5 break-words whitespace-pre-wrap text-white shadow-[0_8px_20px_rgba(11,58,102,0.14)] sm:text-sm sm:leading-6">
           <MessagePrimitive.Parts />
         </div>
         <time
@@ -156,8 +161,8 @@ const FullscreenAssistantMessage: React.FC = () => {
   if (!hasContent) return null;
 
   return (
-    <MessagePrimitive.Root className="group mx-auto grid w-full max-w-[52rem] grid-cols-[2rem_minmax(0,1fr)] gap-3 px-4 py-4 sm:px-6">
-      <span className="grid size-8 place-items-center rounded-full bg-[#0b3a66] text-white shadow-sm">
+    <MessagePrimitive.Root className="chat-message group mx-auto grid w-full max-w-[56rem] grid-cols-[2rem_minmax(0,1fr)] gap-3 px-4 py-4 sm:px-6">
+      <span className="grid size-8 place-items-center rounded-xl bg-[#0b3a66] text-white shadow-sm">
         <ChatIcon name="sparkles" className="size-4" />
       </span>
       <div className="min-w-0 pt-1 text-sm leading-7 text-slate-700">
@@ -170,7 +175,7 @@ const FullscreenAssistantMessage: React.FC = () => {
 
 const FullscreenUserMessage: React.FC = () => {
   return (
-    <MessagePrimitive.Root className="mx-auto flex w-full max-w-[52rem] justify-end px-4 py-4 sm:px-6">
+    <MessagePrimitive.Root className="chat-message mx-auto flex w-full max-w-[56rem] justify-end px-4 py-4 sm:px-6">
       <div className="max-w-[85%] overflow-hidden rounded-2xl rounded-br-md bg-[#0b3a66] px-4 py-2.5 text-sm leading-6 break-words whitespace-pre-wrap text-white sm:max-w-[72%]">
         <MessagePrimitive.Parts />
       </div>
@@ -227,27 +232,27 @@ const EmptyThread: React.FC<EmptyThreadProps> = ({ mode, userType }) => {
 
   if (mode === 'fullscreen') {
     return (
-      <section className="mx-auto flex w-full max-w-[34rem] flex-col px-5 pt-6 pb-4 text-left sm:min-h-[calc(100dvh-12rem)] sm:translate-y-10 sm:justify-center sm:pb-20">
-        <div className="hidden w-fit items-center gap-2 rounded-full border border-sky-200/80 bg-[#eaf3fb] px-3 py-1.5 text-[11px] font-semibold text-[#0b3a66] sm:inline-flex">
+      <section className="mx-auto flex w-full max-w-[40rem] flex-col px-5 pt-8 pb-4 text-left sm:min-h-[calc(100dvh-12rem)] sm:translate-y-6 sm:justify-center sm:pb-20">
+        <div className="w-fit items-center gap-2 rounded-full border border-sky-200/80 bg-white px-3 py-1.5 text-[11px] font-semibold text-[#0b3a66] sm:inline-flex">
           <ChatIcon name="shield" className="size-3.5" />
           {assistantLabel}
         </div>
-        <h2 className="mt-4 max-w-[32rem] text-[32px] leading-[1.08] font-semibold tracking-[-0.035em] text-slate-950 sm:mt-5 sm:text-[40px]">
+        <h2 className="mt-5 max-w-[38rem] text-[34px] leading-[1.04] font-semibold tracking-[-0.045em] text-balance text-slate-950 sm:text-[48px]">
           Hi {greetingName}, what can I help you find?
         </h2>
-        <p className="mt-4 max-w-[31rem] text-[14px] leading-6 text-slate-500">
+        <p className="mt-4 max-w-[34rem] text-[15px] leading-7 text-slate-500">
           {helperText}
         </p>
-        <div className="mt-8 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+        <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
           {suggestions.map((suggestion) => (
             <button
               key={suggestion}
               type="button"
               onClick={() => submitSuggestion(suggestion)}
-              className="group/suggestion flex min-h-14 items-center justify-between gap-4 rounded-2xl border border-slate-200/90 bg-white px-4 py-3 text-left text-[15px] font-medium text-slate-700 shadow-[0_1px_3px_rgba(15,23,42,0.05)] transition-colors hover:border-sky-200 hover:bg-[#fbfdff] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0b3a66]"
+              className="group/suggestion flex min-h-16 items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-white px-4 py-3.5 text-left text-sm font-medium text-slate-700 transition-colors hover:border-sky-200 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1677a2]"
             >
               <span>{suggestion}</span>
-              <span className="grid size-7 shrink-0 place-items-center rounded-full bg-[#f1f6fb] text-slate-400 transition-colors group-hover/suggestion:text-[#0b3a66]">
+              <span className="grid size-8 shrink-0 place-items-center rounded-xl bg-[#e8f1f8] text-slate-400 transition-colors group-hover/suggestion:bg-[#0b3a66] group-hover/suggestion:text-white">
                 <ChatIcon name="send" className="size-3.5" />
               </span>
             </button>
@@ -328,7 +333,7 @@ const Thread: React.FC<ThreadProps> = ({
       }
       className={
         mode === 'fullscreen'
-          ? 'relative flex h-full min-h-0 flex-col overflow-hidden bg-[#f7f9fc] text-slate-900'
+          ? 'relative flex h-full min-h-0 flex-col overflow-hidden bg-[#f4f7fb] text-slate-900'
           : 'relative flex h-full min-h-0 flex-col overflow-hidden bg-white text-slate-900'
       }
     >
@@ -342,8 +347,8 @@ const Thread: React.FC<ThreadProps> = ({
         <ThreadPrimitive.Viewport
           className={
             mode === 'fullscreen'
-              ? 'chat-scrollbar relative flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain bg-[#f7f9fc] pt-20 scroll-smooth'
-              : 'chat-scrollbar relative flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain bg-[#f7f9fc] scroll-smooth'
+              ? 'chat-scrollbar relative flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain bg-transparent pt-20'
+              : 'chat-scrollbar relative flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain bg-[#f8fafc]'
           }
         >
           <ThreadPrimitive.Empty>
@@ -363,14 +368,14 @@ const Thread: React.FC<ThreadProps> = ({
             aria-label="Scroll to latest message"
             className={
               mode === 'fullscreen'
-                ? 'sticky bottom-28 mx-auto mb-2 grid size-9 shrink-0 place-items-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-md transition hover:-translate-y-0.5 hover:text-[#0b3a66] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0b3a66] disabled:invisible'
-                : 'sticky bottom-3 mx-auto mb-2 grid size-9 shrink-0 place-items-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-md transition hover:-translate-y-0.5 hover:text-[#0b3a66] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0b3a66] disabled:invisible'
+                ? 'sticky bottom-36 z-10 mx-auto mb-2 grid size-9 shrink-0 place-items-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-md transition hover:-translate-y-0.5 hover:text-[#0b3a66] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0b3a66] disabled:invisible'
+                : 'sticky bottom-3 z-10 mx-auto mb-2 grid size-9 shrink-0 place-items-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-md transition hover:-translate-y-0.5 hover:text-[#0b3a66] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0b3a66] disabled:invisible'
             }
           >
             <ChatIcon name="arrow-down" className="size-4" />
           </ThreadPrimitive.ScrollToBottom>
           {mode === 'fullscreen' ? (
-            <ThreadPrimitive.ViewportFooter className="sticky bottom-0 mt-auto bg-linear-to-t from-[#f7f9fc] via-[#f7f9fc] to-transparent pt-5">
+            <ThreadPrimitive.ViewportFooter className="sticky bottom-0 mt-auto bg-[#f4f7fb] pt-4">
               <Composer mode="fullscreen" />
             </ThreadPrimitive.ViewportFooter>
           ) : null}
