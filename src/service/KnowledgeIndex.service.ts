@@ -5,22 +5,22 @@ export interface KnowledgeIndexResult {
   sourceHash: string;
 }
 
-const getApiBaseUrl = (): string => {
-  const configured = import.meta.env.VITE_API_URL?.trim();
-  if (configured) return configured.replace(/\/$/, '');
+// const getApiBaseUrl = (): string => {
+//   const configured = import.meta.env.VITE_API_URL?.trim();
+//   if (configured) return configured.replace(/\/$/, '');
 
-  const websocketUrl = import.meta.env.VITE_WS_URL?.trim();
-  if (websocketUrl) {
-    const url = new URL(websocketUrl);
-    url.protocol = url.protocol === 'wss:' ? 'https:' : 'http:';
-    url.pathname = '';
-    url.search = '';
-    url.hash = '';
-    return url.toString().replace(/\/$/, '');
-  }
+//   const websocketUrl = import.meta.env.VITE_WS_URL?.trim();
+//   if (websocketUrl) {
+//     const url = new URL(websocketUrl);
+//     url.protocol = url.protocol === 'wss:' ? 'https:' : 'http:';
+//     url.pathname = '';
+//     url.search = '';
+//     url.hash = '';
+//     return url.toString().replace(/\/$/, '');
+//   }
 
-  return 'http://localhost:5000';
-};
+//   return 'http://localhost:5000';
+// };
 
 export const reindexKnowledge = async (): Promise<KnowledgeIndexResult> => {
   const token = import.meta.env.VITE_RAG_INDEX_TOKEN?.trim();
