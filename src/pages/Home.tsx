@@ -40,11 +40,11 @@ export const HomePage: React.FC<HomePageProps> = ({
           </div> */}
           <h1
             id="poc-title"
-            className="mx-auto mt-4 max-w-xl text-4xl leading-[1.08] font-semibold tracking-[-0.04em] text-balance text-slate-950 sm:text-5xl"
+            className="mx-auto mt-4 max-w-xl text-4xl leading-[1.08] font-semibold tracking-[-0.04em] text-balance text-[#0b3a66] sm:text-5xl"
           >
             Intelligent Chat Assistant
           </h1>
-          <p className="mx-auto mt-4 max-w-lg text-sm leading-6 text-slate-600 sm:text-base">
+          <p className="mx-auto mt-4 max-w-lg text-sm leading-6 text-[#47647f] sm:text-base">
             Explore a conversational assistant grounded in enterprise knowledge
             and connected customer records.
           </p>
@@ -52,12 +52,7 @@ export const HomePage: React.FC<HomePageProps> = ({
 
         <div className="mt-8 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6">
           <fieldset>
-            <legend className="mb-1 text-sm font-semibold text-slate-900">
-              Choose a demo persona
-            </legend>
-            <p className="mb-4 text-xs leading-5 text-slate-500">
-              This changes the assistant context and available workflows.
-            </p>
+            <legend className="sr-only">Assistant role</legend>
             <div className="grid gap-3 sm:grid-cols-2">
               {ROLE_OPTIONS.map((role) => {
                 const selected = userType === role.type;
@@ -98,10 +93,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             </div>
           </fieldset>
 
-          <div className="mt-5 flex flex-col gap-3 border-t border-slate-200 pt-5 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-xs leading-5 text-slate-500">
-              Demo data only · Session resets on close
-            </p>
+          <div className="mt-5 flex justify-end">
             <button
               type="button"
               disabled={!userType}

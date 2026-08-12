@@ -24,7 +24,6 @@ const AGENT_SUGGESTIONS = [
   'Product features',
   'Claim documents',
   'Transfer procedures',
-  'Contract details',
 ] as const;
 
 const getGreetingName = (userType?: UserType): string =>
