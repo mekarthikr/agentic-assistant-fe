@@ -28,7 +28,7 @@ export const reindexKnowledge = async (): Promise<KnowledgeIndexResult> => {
     throw new Error('The indexing trigger token is not configured.');
   }
 
-  const response = await fetch(`${getApiBaseUrl()}/knowledge/reindex`, {
+  const response = await fetch(`https://agentic-assistant-be.vercel.app/knowledge/reindex`, {
     method: 'POST',
     headers: { Authorization: `Bearer ${token}` },
   });
