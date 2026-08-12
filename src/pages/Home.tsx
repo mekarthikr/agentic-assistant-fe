@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import type React from 'react';
 
 import { ChatIcon } from '@app/components/ChatIcon';
+import { reindexKnowledge } from '@app/service';
 import type { HomePageProps, UserType } from '@app/types';
 
 const ROLE_OPTIONS: ReadonlyArray<{
@@ -25,7 +27,28 @@ export const HomePage: React.FC<HomePageProps> = ({
   onUserTypeChange,
   onOpenChat,
 }) => {
+  const [indexStatus, setIndexStatus] = useState<
+    'idle' | 'indexing' | 'success' | 'error'
+  >('idle');
+  const [indexMessage, setIndexMessage] = useState('');
   const selectedRole = ROLE_OPTIONS.find(({ type }) => type === userType);
+
+  const startIndexing = async () => {
+    setIndexStatus('indexing');
+    setIndexMessage('Uploading current knowledge to Chroma...');
+    try {
+      const result = await reindexKnowledge();
+      setIndexStatus('success');
+      setIndexMessage(
+        `Indexed ${result.indexedSections} sections into ${result.collection}.`,
+      );
+    } catch (error) {
+      setIndexStatus('error');
+      setIndexMessage(
+        error instanceof Error ? error.message : 'Knowledge indexing failed.',
+      );
+    }
+  };
 
   return (
     <main className="poc-canvas grid min-h-dvh place-items-center px-5 py-10 text-slate-950 sm:px-8">
@@ -102,6 +125,30 @@ export const HomePage: React.FC<HomePageProps> = ({
             <p className="text-xs leading-5 text-slate-500">
               Demo data only · Session resets on close
             </p>
+            <p
+              aria-live="polite"
+              className={`text-xs leading-5 ${
+                indexStatus === 'error'
+                  ? 'text-red-600'
+                  : indexStatus === 'success'
+                    ? 'text-emerald-700'
+                    : 'text-slate-500'
+              }`}
+            >
+              {indexMessage}
+            </p>
+            <button
+              type="button"
+              disabled={indexStatus === 'indexing'}
+              onClick={() => void startIndexing()}
+              className="secondary-button focus-ring shrink-0"
+            >
+              <ChatIcon
+                name={indexStatus === 'indexing' ? 'retry' : 'database'}
+                className={`size-3.5 ${indexStatus === 'indexing' ? 'animate-spin' : ''}`}
+              />
+              {indexStatus === 'indexing' ? 'Indexing…' : 'Index knowledge'}
+            </button>
             <button
               type="button"
               disabled={!userType}

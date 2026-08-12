@@ -7,6 +7,7 @@ export type ChatIconName =
   | 'copy'
   | 'expand'
   | 'external-link'
+  | 'database'
   | 'plus'
   | 'retry'
   | 'send'
