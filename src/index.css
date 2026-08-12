@@ -3,45 +3,102 @@
 @import 'tailwindcss';
 
 @layer base {
+  :root {
+    color-scheme: light;
+    --canvas: #f4f7fb;
+    --surface: #ffffff;
+    --surface-subtle: #f8fafc;
+    --ink: #102033;
+    --muted: #627186;
+    --line: #dce4ed;
+    --brand: #0b3a66;
+    --brand-strong: #072b4d;
+    --brand-soft: #e8f1f8;
+    --accent: #2a7e9b;
+    --focus: #1677a2;
+  }
+
   html {
     font-family: 'Geist Variable', system-ui, sans-serif;
+    color: var(--ink);
+    background: var(--canvas);
+    text-rendering: optimizeLegibility;
   }
 
   body {
     margin: 0;
     min-width: 320px;
     min-height: 100vh;
-    background: #f7f9fc;
+    background: var(--canvas);
+    -webkit-font-smoothing: antialiased;
   }
 
   button,
   textarea {
     font: inherit;
   }
+
+  button {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  ::selection {
+    color: white;
+    background: var(--brand);
+  }
 }
 
 @layer components {
+  .app-canvas {
+    background:
+      radial-gradient(
+        circle at 8% 0%,
+        rgba(42, 126, 155, 0.1),
+        transparent 28rem
+      ),
+      radial-gradient(
+        circle at 92% 92%,
+        rgba(11, 58, 102, 0.08),
+        transparent 32rem
+      ),
+      var(--canvas);
+  }
+
+  .poc-canvas {
+    background: linear-gradient(135deg, #fafbfd 0%, #f1f6f9 52%, #e8f1f7 100%);
+  }
+
+  .focus-ring {
+    @apply focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1677a2];
+  }
+
+  .primary-button {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-[#0b3a66] bg-[#0b3a66] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#072b4d] disabled:cursor-not-allowed disabled:border-slate-300 disabled:bg-slate-300;
+  }
+
   .chat-icon-button {
-    @apply grid size-9 place-items-center rounded-lg text-slate-500 transition-colors hover:bg-slate-100 hover:text-[#0b3a66] focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[#0b3a66] disabled:cursor-not-allowed disabled:opacity-40;
+    @apply grid size-9 place-items-center rounded-xl text-slate-500 transition-all duration-200 hover:bg-slate-100 hover:text-[#0b3a66] focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[#0b3a66] disabled:cursor-not-allowed disabled:opacity-40;
   }
 
   .chat-scrollbar {
-    scrollbar-color: rgba(11, 58, 102, 0.55) #eaf3fb;
+    scrollbar-color: rgba(11, 58, 102, 0.38) transparent;
     scrollbar-width: thin;
+    overflow-anchor: none;
   }
 
   .chat-scrollbar::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
   }
 
   .chat-scrollbar::-webkit-scrollbar-track {
-    background: #eaf3fb;
+    background: transparent;
   }
 
   .chat-scrollbar::-webkit-scrollbar-thumb {
-    border: 2px solid #eaf3fb;
+    border: 1px solid transparent;
     border-radius: 999px;
-    background: rgba(11, 58, 102, 0.55);
+    background: rgba(11, 58, 102, 0.38);
+    background-clip: padding-box;
   }
 
   .chat-scrollbar::-webkit-scrollbar-thumb:hover {
@@ -56,6 +113,11 @@
 
   .chat-markdown {
     overflow-wrap: anywhere;
+  }
+
+  .chat-message {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 112px;
   }
 
   .chat-markdown > :first-child {
@@ -192,6 +254,20 @@
   .chat-markdown strong {
     color: #0f172a;
     font-weight: 650;
+  }
+
+  .status-pulse {
+    animation: status-pulse 2.4s ease-out infinite;
+  }
+}
+
+@keyframes status-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.38);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 5px rgba(16, 185, 129, 0);
   }
 }
 

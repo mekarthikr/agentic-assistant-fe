@@ -1,55 +1,120 @@
 import type React from 'react';
 
-import type { HomePageProps } from '@app/types';
+import { ChatIcon } from '@app/components/ChatIcon';
+import type { HomePageProps, UserType } from '@app/types';
+
+const ROLE_OPTIONS: ReadonlyArray<{
+  type: UserType;
+  title: string;
+  description: string;
+}> = [
+  {
+    type: 'agent',
+    title: 'Agent',
+    description: 'Products, contracts, claims, and service procedures.',
+  },
+  {
+    type: 'client',
+    title: 'Client',
+    description: 'Policies, payments, documents, and customer support.',
+  },
+];
 
 export const HomePage: React.FC<HomePageProps> = ({
   userType,
   onUserTypeChange,
   onOpenChat,
 }) => {
-  return (
-    <main className="flex min-h-dvh items-center justify-center px-6 text-slate-900">
-      <section className="mx-auto max-w-2xl text-center">
-        <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
-          Intelligent Assistant
-        </h1>
-        <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-slate-600">
-          A focused workspace for product, contract, and premium.
-        </p>
-        <fieldset className="mx-auto mt-8 max-w-md">
-          <div className="mt-3 grid grid-cols-2 rounded-xl border border-slate-200 bg-white p-1 shadow-sm">
-            {(['agent', 'client'] as const).map((type) => {
-              const selected = userType === type;
-              const label = type === 'agent' ? 'Agent' : 'Client';
+  const selectedRole = ROLE_OPTIONS.find(({ type }) => type === userType);
 
-              return (
-                <button
-                  key={type}
-                  type="button"
-                  aria-pressed={selected}
-                  onClick={() => onUserTypeChange(type)}
-                  className={`rounded-lg px-4 py-3 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0b3a66] ${
-                    selected
-                      ? 'bg-[#0b3a66] text-white shadow-sm'
-                      : 'text-slate-600 hover:bg-slate-100'
-                  }`}
-                >
-                  {label}
-                </button>
-              );
-            })}
+  return (
+    <main className="poc-canvas grid min-h-dvh place-items-center px-5 py-10 text-slate-950 sm:px-8">
+      <section className="w-full max-w-[42rem]" aria-labelledby="poc-title">
+        <div className="text-center">
+          {/* <span className="mx-auto grid size-11 place-items-center rounded-xl border border-[#0b3a66] bg-[#0b3a66] text-white">
+            <ChatIcon name="sparkles" className="size-5" />
+          </span>
+          <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1 text-[10px] font-semibold tracking-[0.12em] text-slate-500 uppercase">
+            <span className="size-1.5 rounded-full bg-emerald-500" />
+            Proof of concept
+          </div> */}
+          <h1
+            id="poc-title"
+            className="mx-auto mt-4 max-w-xl text-4xl leading-[1.08] font-semibold tracking-[-0.04em] text-balance text-slate-950 sm:text-5xl"
+          >
+            Intelligent Chat Assistant
+          </h1>
+          <p className="mx-auto mt-4 max-w-lg text-sm leading-6 text-slate-600 sm:text-base">
+            Explore a conversational assistant grounded in enterprise knowledge
+            and connected customer records.
+          </p>
+        </div>
+
+        <div className="mt-8 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6">
+          <fieldset>
+            <legend className="mb-1 text-sm font-semibold text-slate-900">
+              Choose a demo persona
+            </legend>
+            <p className="mb-4 text-xs leading-5 text-slate-500">
+              This changes the assistant context and available workflows.
+            </p>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {ROLE_OPTIONS.map((role) => {
+                const selected = userType === role.type;
+
+                return (
+                  <button
+                    key={role.type}
+                    type="button"
+                    aria-pressed={selected}
+                    onClick={() => onUserTypeChange(role.type)}
+                    className={`focus-ring relative rounded-xl border p-4 text-left transition-colors ${
+                      selected
+                        ? 'border-[#0b3a66] bg-[#f4f8fb]'
+                        : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50'
+                    }`}
+                  >
+                    <span className="block pr-7 text-sm font-semibold text-slate-900">
+                      {role.title}
+                    </span>
+                    <span className="mt-1 block pr-5 text-xs leading-5 text-slate-500">
+                      {role.description}
+                    </span>
+                    <span
+                      aria-hidden="true"
+                      className={`absolute top-4 right-4 grid size-4 place-items-center rounded-full border ${
+                        selected
+                          ? 'border-[#0b3a66] bg-[#0b3a66]'
+                          : 'border-slate-300 bg-white'
+                      }`}
+                    >
+                      {selected ? (
+                        <span className="size-1 rounded-full bg-white" />
+                      ) : null}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </fieldset>
+
+          <div className="mt-5 flex flex-col gap-3 border-t border-slate-200 pt-5 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-xs leading-5 text-slate-500">
+              Demo data only · Session resets on close
+            </p>
+            <button
+              type="button"
+              disabled={!userType}
+              onClick={() => userType && onOpenChat(userType)}
+              className="primary-button focus-ring shrink-0"
+            >
+              {selectedRole
+                ? `Continue as ${selectedRole.title}`
+                : 'Select a persona'}
+              <ChatIcon name="send" className="size-3.5" />
+            </button>
           </div>
-        </fieldset>
-        <button
-          type="button"
-          disabled={!userType}
-          onClick={() => userType && onOpenChat(userType)}
-          className="mt-6 rounded-xl bg-[#0b3a66] px-5 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#082e52] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0b3a66] disabled:cursor-not-allowed disabled:bg-slate-300"
-        >
-          {userType
-            ? `Continue as ${userType === 'agent' ? 'Agent' : 'Client'}`
-            : 'Select a user type'}
-        </button>
+        </div>
       </section>
     </main>
   );

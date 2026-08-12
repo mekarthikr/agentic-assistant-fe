@@ -24,28 +24,32 @@ export const Composer: React.FC<ComposerProps> = ({ mode }) => {
     setValidationMessage('');
   };
 
+  const shellClassName =
+    mode === 'fullscreen'
+      ? 'grid grid-cols-[minmax(0,1fr)_2.75rem] grid-rows-[auto_auto] items-center gap-x-3 rounded-[20px] border border-slate-200 bg-white px-3 py-2.5 shadow-sm transition-colors focus-within:border-[#1677a2]/50'
+      : 'grid grid-cols-[minmax(0,1fr)_2.75rem] grid-rows-[auto_auto] items-center gap-x-3 rounded-[18px] border border-slate-200 bg-white px-2.5 py-2 shadow-[0_6px_22px_rgba(15,23,42,0.08)] transition focus-within:border-[#1677a2]/50 focus-within:ring-2 focus-within:ring-[#1677a2]/10';
+
+  const actionClassName =
+    'grid size-10 shrink-0 place-items-center rounded-xl bg-[#0b3a66] text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-[#072b4d] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1677a2] disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-40';
+
   return (
     <div
       className={
         mode === 'fullscreen'
-          ? 'mx-auto w-full max-w-[54rem] px-4 pb-5 sm:px-5 sm:pb-6'
+          ? 'mx-auto w-full max-w-[56rem] px-4 pb-5 sm:px-6 sm:pb-7'
           : 'mx-auto w-full px-3 py-3'
       }
     >
       <ComposerPrimitive.Root
         onSubmit={handleSubmit}
-        className={
-          mode === 'fullscreen'
-            ? 'grid grid-cols-[minmax(0,1fr)_2.75rem] grid-rows-[auto_auto] items-center gap-x-3 rounded-[20px] border border-slate-200/90 bg-white px-2.5 py-2 shadow-[0_12px_36px_rgba(15,23,42,0.09)] focus-within:border-slate-300'
-            : 'grid grid-cols-[minmax(0,1fr)_2.75rem] grid-rows-[auto_auto] items-center gap-x-3 rounded-[16px] border border-slate-200 bg-white px-2.5 py-2 shadow-[0_5px_18px_rgba(15,23,42,0.07)] focus-within:border-slate-300'
-        }
+        className={shellClassName}
       >
         <ComposerPrimitive.Input
           autoFocus={false}
           submitMode="enter"
           maxLength={MAX_MESSAGE_LENGTH}
           rows={1}
-          placeholder="Ask about a contract, product, or premium..."
+          placeholder="Ask about a policy, contract, claim, or product…"
           aria-describedby="composer-help composer-validation composer-counter"
           className="col-start-1 row-start-1 max-h-36 min-h-9 w-full resize-none overflow-y-auto bg-transparent px-2 pt-2 pb-0 text-[15px] leading-6 text-slate-900 outline-none placeholder:text-slate-400 disabled:cursor-not-allowed disabled:opacity-60"
           disabled={isDisabled}
@@ -97,7 +101,7 @@ export const Composer: React.FC<ComposerProps> = ({ mode }) => {
             <ComposerPrimitive.Cancel
               title="Stop response"
               aria-label="Stop generating response"
-              className="grid size-10 shrink-0 place-items-center rounded-xl bg-[#0b3a66] text-white shadow-sm transition-colors hover:bg-[#082e52] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0b3a66] disabled:opacity-50"
+              className={actionClassName}
             >
               <ChatIcon name="stop" className="size-4" />
             </ComposerPrimitive.Cancel>
@@ -105,13 +109,18 @@ export const Composer: React.FC<ComposerProps> = ({ mode }) => {
             <ComposerPrimitive.Send
               title="Send message"
               aria-label="Send message"
-              className="grid size-10 shrink-0 place-items-center rounded-xl bg-[#0b3a66] text-white shadow-sm transition-colors hover:bg-[#082e52] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0b3a66] disabled:cursor-not-allowed"
+              className={actionClassName}
             >
               <ChatIcon name="send" className="size-4" />
             </ComposerPrimitive.Send>
           )}
         </div>
       </ComposerPrimitive.Root>
+      {mode === 'fullscreen' ? (
+        <p className="mt-2 text-center text-[10px] text-slate-400">
+          Responses are grounded in available enterprise knowledge and records.
+        </p>
+      ) : null}
     </div>
   );
 };

@@ -25,6 +25,18 @@ export interface ModelTokenUsage {
   rateLimitRemainingTokens?: number | null;
 }
 
+export interface ChatSource {
+  id: string;
+  title: string;
+  filename: string;
+  mediaType: string;
+  page?: number;
+}
+
+export type ChatStreamEvent =
+  | { type: 'delta'; delta: string }
+  | { type: 'complete'; sources: ChatSource[] };
+
 export interface ChatServerMessage {
   type: string;
   requestId?: string;
@@ -34,12 +46,14 @@ export interface ChatServerMessage {
   model?: string;
   contextWindow?: number;
   tokenUsage?: ModelTokenUsage;
+  sources?: ChatSource[];
 }
 
 export interface PendingChatRequest {
   deltas: string[];
   done: boolean;
   error?: Error;
+  sources?: ChatSource[];
   wake?: () => void;
 }
 

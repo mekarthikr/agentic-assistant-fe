@@ -2,6 +2,8 @@ import type {
   ChatConnectionStatus,
   ChatRequest,
   ChatServerMessage,
+  ChatSource,
+  ChatStreamEvent,
   ModelTokenUsage,
   PendingChatRequest,
 } from '@app/types';
@@ -53,6 +55,34 @@ const normalizeTokenUsage = (value: unknown): ModelTokenUsage | null => {
       ? {}
       : { rateLimitRemainingTokens }),
   };
+};
+
+const normalizeSources = (value: unknown): ChatSource[] => {
+  if (!Array.isArray(value)) return [];
+
+  return value.flatMap((item) => {
+    if (!item || typeof item !== 'object') return [];
+    const source = item as Record<string, unknown>;
+    if (
+      typeof source.id !== 'string' ||
+      typeof source.title !== 'string' ||
+      typeof source.filename !== 'string' ||
+      typeof source.mediaType !== 'string'
+    ) {
+      return [];
+    }
+
+    const page = getTokenCount(source.page);
+    return [
+      {
+        id: source.id,
+        title: source.title,
+        filename: source.filename,
+        mediaType: source.mediaType,
+        ...(page === undefined ? {} : { page }),
+      },
+    ];
+  });
 };
 
 const getWebSocketUrl = (): string => {
@@ -166,6 +196,7 @@ export class ChatSocketService {
           request.wake?.();
         } else if (payload.type === 'chat.complete') {
           this.setTokenUsage(normalizeTokenUsage(payload.tokenUsage));
+          request.sources = normalizeSources(payload.sources);
           request.done = true;
           request.wake?.();
         } else if (payload.type === 'chat.error') {
@@ -219,7 +250,7 @@ export class ChatSocketService {
   public async *stream(
     request: ChatRequest,
     signal: AbortSignal,
-  ): AsyncGenerator<string> {
+  ): AsyncGenerator<ChatStreamEvent> {
     await this.connect();
 
     if (!this.socket || this.socket.readyState !== WebSocket.OPEN) {
@@ -255,11 +286,12 @@ export class ChatSocketService {
         }
 
         while (pendingRequest.deltas.length > 0) {
-          yield pendingRequest.deltas.shift()!;
+          yield { type: 'delta', delta: pendingRequest.deltas.shift()! };
         }
       }
 
       if (pendingRequest.error) throw pendingRequest.error;
+      yield { type: 'complete', sources: pendingRequest.sources ?? [] };
     } finally {
       signal.removeEventListener('abort', cancel);
       this.pending.delete(request.requestId);
