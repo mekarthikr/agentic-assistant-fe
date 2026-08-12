@@ -26,6 +26,7 @@ export interface ModelTokenUsage {
 }
 
 export interface ChatSource {
+  origin: 'rag';
   id: string;
   title: string;
   filename: string;

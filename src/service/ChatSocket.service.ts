@@ -65,6 +65,7 @@ const normalizeSources = (value: unknown): ChatSource[] => {
     const source = item as Record<string, unknown>;
     if (
       typeof source.id !== 'string' ||
+      source.origin !== 'rag' ||
       typeof source.title !== 'string' ||
       typeof source.filename !== 'string' ||
       typeof source.mediaType !== 'string'
@@ -75,6 +76,7 @@ const normalizeSources = (value: unknown): ChatSource[] => {
     const page = getTokenCount(source.page);
     return [
       {
+        origin: 'rag',
         id: source.id,
         title: source.title,
         filename: source.filename,

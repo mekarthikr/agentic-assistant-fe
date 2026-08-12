@@ -48,7 +48,7 @@ const SourcePill: React.FC<SourceMessagePartProps> = ({
   title,
   url,
 }) => {
-  const label = title || 'View source';
+  const label = title ? `RAG source · ${title}` : 'RAG source';
 
   if (sourceType === 'url') {
     return (
@@ -58,7 +58,7 @@ const SourcePill: React.FC<SourceMessagePartProps> = ({
         rel="noreferrer noopener"
         className="mt-3 mr-2 inline-flex max-w-full items-center gap-1.5 rounded-lg border border-sky-200/80 bg-sky-50 px-2.5 py-1.5 text-xs font-medium text-[#0b3a66] transition-colors hover:border-sky-300 hover:bg-[#e8f1f8] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1677a2]"
       >
-        <span className="truncate">Source · {label}</span>
+        <span className="truncate">{label}</span>
         <ChatIcon name="external-link" className="size-3.5 shrink-0" />
       </a>
     );
@@ -67,7 +67,7 @@ const SourcePill: React.FC<SourceMessagePartProps> = ({
   return (
     <span className="mt-3 mr-2 inline-flex max-w-full items-center gap-1.5 rounded-lg border border-sky-200/80 bg-sky-50 px-2.5 py-1.5 text-xs font-medium text-[#0b3a66]">
       <ChatIcon name="shield" className="size-3.5 shrink-0" />
-      <span className="truncate">Source · {label}</span>
+      <span className="truncate">{label}</span>
     </span>
   );
 };
