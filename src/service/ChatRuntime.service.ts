@@ -2,6 +2,8 @@ import type { ChatModelAdapter, ThreadMessage } from '@assistant-ui/react';
 import type { ChatSource, UserType } from '@app/types';
 import type { ChatSocketService } from './ChatSocket.service';
 
+const SHOW_RAG_SOURCES = import.meta.env.VITE_SHOW_RAG_SOURCES === 'true';
+
 const getText = (message: ThreadMessage): string =>
   message.content
     .filter((part) => part.type === 'text')
@@ -66,7 +68,7 @@ export const createWebSocketChatAdapter = (
         yield {
           content: [
             { type: 'text', text: response },
-            ...sources.map(toSourcePart),
+            ...(SHOW_RAG_SOURCES ? sources.map(toSourcePart) : []),
           ],
           status: { type: 'complete', reason: 'stop' },
         };
