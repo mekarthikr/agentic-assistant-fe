@@ -1,6 +1,7 @@
 import type { ChatModelAdapter, ThreadMessage } from '@assistant-ui/react';
 import type { ChatSource, UserType } from '@app/types';
 import type { ChatSocketService } from './ChatSocket.service';
+import { documentService } from './Document.service';
 
 const SHOW_RAG_SOURCES = import.meta.env.VITE_SHOW_RAG_SOURCES === 'true';
 
@@ -50,6 +51,7 @@ export const createWebSocketChatAdapter = (
           conversationId: chatSocketService.getConversationId(),
           message: getText(userMessage),
           userType,
+          ...documentService.getChatScope(),
         },
         abortSignal,
       )) {
