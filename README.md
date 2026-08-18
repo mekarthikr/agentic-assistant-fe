@@ -23,7 +23,7 @@ set `VITE_WS_AUTH_TOKEN` to the backend's optional shared
 pills.
 
 Set `VITE_API_URL` to the backend HTTP origin for document uploads. The composer
-can upload PDF, DOCX, and TXT files, search all ready documents or a selected
+can upload PDF, DOCX, TXT, and Markdown files, search all ready documents or a selected
 subset, and switch between hybrid and document-only answers.
 
 The assistant-ui runtime is provided by `ChatRuntimeProvider`. Its

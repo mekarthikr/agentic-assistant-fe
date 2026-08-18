@@ -88,7 +88,7 @@ export const Composer: React.FC<ComposerProps> = ({ mode }) => {
         <input
           ref={fileInput}
           type="file"
-          accept=".pdf,.docx,.txt"
+          accept=".pdf,.docx,.txt,.md"
           className="sr-only"
           onChange={(event) => void uploadDocument(event.target.files?.[0])}
         />
