@@ -231,7 +231,7 @@ const EmptyThread: React.FC<EmptyThreadProps> = ({ mode, userType }) => {
 
   if (mode === 'fullscreen') {
     return (
-      <section className="mx-auto flex w-full max-w-[40rem] flex-col px-5 pt-8 pb-4 text-left sm:min-h-[calc(100dvh-12rem)] sm:translate-y-6 sm:justify-center sm:pb-20">
+      <section className="mx-auto flex w-full max-w-[40rem] flex-col px-5 pt-8 pb-4 text-left sm:translate-y-6">
         <div className="w-fit items-center gap-2 rounded-full border border-sky-200/80 bg-white px-3 py-1.5 text-[11px] font-semibold text-[#0b3a66] sm:inline-flex">
           <ChatIcon name="shield" className="size-3.5" />
           {assistantLabel}
@@ -351,7 +351,7 @@ const Thread: React.FC<ThreadProps> = ({
           scrollToBottomOnThreadSwitch={false}
           className={
             mode === 'fullscreen'
-              ? 'chat-scrollbar relative flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain bg-transparent pt-20'
+              ? 'chat-scrollbar relative flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain bg-transparent'
               : 'chat-scrollbar relative flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain bg-[#f8fafc]'
           }
         >
