@@ -73,6 +73,10 @@ const normalizeSources = (value: unknown): ChatSource[] => {
     }
 
     const page = getTokenCount(source.page);
+    const documentId =
+      typeof source.documentId === 'string' ? source.documentId : undefined;
+    const section =
+      typeof source.section === 'string' ? source.section : undefined;
     return [
       {
         id: source.id,
@@ -80,6 +84,8 @@ const normalizeSources = (value: unknown): ChatSource[] => {
         filename: source.filename,
         mediaType: source.mediaType,
         ...(page === undefined ? {} : { page }),
+        ...(documentId === undefined ? {} : { documentId }),
+        ...(section === undefined ? {} : { section }),
       },
     ];
   });

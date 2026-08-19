@@ -12,6 +12,21 @@ export interface ChatRequest {
   conversationId: string;
   message: string;
   userType: UserType;
+  ragMode?: RagMode;
+  documentIds?: string[];
+}
+
+export type RagMode = 'document-only' | 'hybrid';
+
+export interface RagDocument {
+  id: string;
+  name: string;
+  mediaType: string;
+  size: number;
+  status: 'uploading' | 'processing' | 'ready' | 'failed';
+  error?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface ModelTokenUsage {
@@ -31,6 +46,8 @@ export interface ChatSource {
   filename: string;
   mediaType: string;
   page?: number;
+  documentId?: string;
+  section?: string;
 }
 
 export type ChatStreamEvent =

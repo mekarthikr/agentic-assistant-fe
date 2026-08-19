@@ -19,8 +19,14 @@ The chat UI connects to `https://agentic-assistant-be.vercel.app/` over a native
 browser WebSocket at `wss://agentic-assistant-be.vercel.app/ws`. Configure
 `VITE_WS_URL` to override that endpoint. If backend authentication is enabled,
 set `VITE_WS_AUTH_TOKEN` to the backend's optional shared
-`SOCKET_AUTH_TOKEN`. RAG source pills are hidden by default; set
-`VITE_SHOW_RAG_SOURCES=true` to display them.
+`SOCKET_AUTH_TOKEN`. Set `VITE_SHOW_RAG_SOURCES=true` to display RAG source
+pills.
+
+Set `VITE_API_URL` to the backend HTTP origin for document uploads. The composer
+can upload PDF, DOCX, TXT, and Markdown files, search all ready documents or a selected
+subset, and switch between hybrid and document-only answers. These controls are
+hidden by default; set `VITE_ENABLE_DOCUMENTS=true` to enable them. The default
+answer mode is hybrid (`Documents + assistant`).
 
 The assistant-ui runtime is provided by `ChatRuntimeProvider`. Its
 `ChatControlContext` exposes connection status, reconnect action, and chat
