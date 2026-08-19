@@ -5,6 +5,7 @@ import { useChatControl } from '@app/components/Chat/ChatRuntimeProvider';
 import { ChatIcon } from '@app/components/ChatIcon';
 import type { HeaderProps, ModelTokenUsage } from '@app/types';
 
+const SHOW_TOKEN_USAGE = import.meta.env.VITE_SHOW_TOKEN_USAGE === 'true';
 const TOKEN_FORMATTER = new Intl.NumberFormat('en-US');
 
 const formatTokenCount = (value: number | null | undefined): string | null =>
@@ -121,7 +122,7 @@ export const Header: React.FC<HeaderProps> = ({
                 ? 'Connecting...'
                 : 'Reconnect chat'}
           </button>
-          {tokenUsage && tokenUsageText ? (
+          {SHOW_TOKEN_USAGE && tokenUsage && tokenUsageText ? (
             <p
               aria-live="polite"
               title={getTokenUsageTitle(tokenUsage)}
