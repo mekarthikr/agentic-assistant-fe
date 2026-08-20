@@ -344,7 +344,6 @@ const Thread: React.FC<ThreadProps> = ({
       />
       <ThreadPrimitive.Root className="flex min-h-0 flex-1 flex-col">
         <ThreadPrimitive.Viewport
-          turnAnchor="top"
           className={
             mode === 'fullscreen'
               ? 'chat-scrollbar relative flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain bg-transparent pt-20'
